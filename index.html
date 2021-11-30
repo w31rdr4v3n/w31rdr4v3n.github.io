@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<title>Writeup TFC CTF 2021</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="style.css">
 <link href='https://fonts.googleapis.com/css?family=Lato:100,400,700' rel='stylesheet' type='text/css'>
@@ -41,9 +42,9 @@
 	<img src="datas/disasmain.png" style="width: 100%;">
 	<p>Avec 0x38 on arrive à atteindre le RIP : "A"*0x38 + "BBBB"</p>
 	<img src="datas/jumpRIP.png" style="width: 100%;">
-	<p>Nous pouvons maintenant éxecuteter notre shellcode sur la pile.
-	Minute !
-	Le RIP contient une addresse.<br>
+	<p>Nous pouvons maintenant éxecuteter notre shellcode sur la pile.<br>
+	Minute !<br>
+	Le RIP doit contenir une addresse(l'addresse de notre shellcode) et non le shellcode.<br>
 	J'ai trouvé une fonction np dans le binaire pour nous faciliter la tâche.
 	</p>
 	<img src="datas/disasnp.png">
