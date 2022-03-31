@@ -1,0 +1,25 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>All Posts - R4v3N Blog</title>
+        <link>https://w31rdr4v3n.github.io/posts/</link>
+        <description>All Posts | R4v3N Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 30 Mar 2022 21:53:15 &#43;0100</lastBuildDate><atom:link href="https://w31rdr4v3n.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>picoCTF2022 Writeup</title>
+    <link>https://w31rdr4v3n.github.io/picoctf2022-writeup/</link>
+    <pubDate>Wed, 30 Mar 2022 21:53:15 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>https://w31rdr4v3n.github.io/picoctf2022-writeup/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/picoctf-logo-social.png" referrerpolicy="no-referrer">
+            </div><p>This article presents answers to the picoCTF 2022 challenges.</p>]]></description>
+</item><item>
+    <title>TFC CTF 2021 Writeup</title>
+    <link>https://w31rdr4v3n.github.io/tfcctf2021-writeup/</link>
+    <pubDate>Thu, 23 Dec 2021 21:22:57 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>https://w31rdr4v3n.github.io/tfcctf2021-writeup/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/tfc.png" referrerpolicy="no-referrer">
+            </div><p>This article provides answer keys to the TFC CTF 2021 challenges.</p>]]></description>
+</item></channel>
+</rss>
