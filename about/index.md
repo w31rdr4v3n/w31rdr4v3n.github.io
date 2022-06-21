@@ -1,8 +1,6 @@
 # About me
 
 
-<img src="me.png" alt="Me" style="width:96px; border-radius: 50%; 50%; justify-content: center; display: block;margin-left: auto;margin-right: auto;"/>
-
 <!--more-->
 >
 >Analyst Developer
@@ -16,4 +14,6 @@
 >Exploit Dev
 >
 >CTF Player [Ability: Pwn, Reverse]
+>
+>Discord: R4v3N#7482
 

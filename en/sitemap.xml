@@ -2,25 +2,7 @@
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
     ><url>
-            <loc>https://w31rdr4v3n.github.io/events/</loc><lastmod>2022-03-31T18:59:29&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
-                        rel="alternate"
-                        hreflang="fr"
-                        href="https://w31rdr4v3n.github.io/fr/events/"
-                        /><xhtml:link
-                    rel="alternate"
-                    hreflang="en"
-                    href="https://w31rdr4v3n.github.io/events/"
-                    /></url><url>
-            <loc>https://w31rdr4v3n.github.io/about/</loc><lastmod>2022-03-25T02:12:15&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.7</priority><xhtml:link
-                        rel="alternate"
-                        hreflang="fr"
-                        href="https://w31rdr4v3n.github.io/fr/about/"
-                        /><xhtml:link
-                    rel="alternate"
-                    hreflang="en"
-                    href="https://w31rdr4v3n.github.io/about/"
-                    /></url><url>
-            <loc>https://w31rdr4v3n.github.io/categories/</loc><lastmod>2022-03-30T21:53:15&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
+            <loc>https://w31rdr4v3n.github.io/categories/</loc><lastmod>2022-06-07T15:03:48&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
                         rel="alternate"
                         hreflang="fr"
                         href="https://w31rdr4v3n.github.io/fr/categories/"
@@ -29,52 +11,61 @@
                     hreflang="en"
                     href="https://w31rdr4v3n.github.io/categories/"
                     /></url><url>
-            <loc>https://w31rdr4v3n.github.io/tags/crypto/</loc><lastmod>2022-03-30T21:53:15&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
+            <loc>https://w31rdr4v3n.github.io/tags/dynamic-linker/</loc><lastmod>2022-06-07T15:03:48&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
                         rel="alternate"
                         hreflang="fr"
-                        href="https://w31rdr4v3n.github.io/fr/tags/crypto/"
+                        href="https://w31rdr4v3n.github.io/fr/tags/dynamic-linker/"
                         /><xhtml:link
                     rel="alternate"
                     hreflang="en"
-                    href="https://w31rdr4v3n.github.io/tags/crypto/"
+                    href="https://w31rdr4v3n.github.io/tags/dynamic-linker/"
                     /></url><url>
-            <loc>https://w31rdr4v3n.github.io/categories/ctf/</loc><lastmod>2022-03-30T21:53:15&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
+            <loc>https://w31rdr4v3n.github.io/tags/elf/</loc><lastmod>2022-06-07T15:03:48&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
                         rel="alternate"
                         hreflang="fr"
-                        href="https://w31rdr4v3n.github.io/fr/categories/ctf/"
+                        href="https://w31rdr4v3n.github.io/fr/tags/elf/"
                         /><xhtml:link
                     rel="alternate"
                     hreflang="en"
-                    href="https://w31rdr4v3n.github.io/categories/ctf/"
+                    href="https://w31rdr4v3n.github.io/tags/elf/"
                     /></url><url>
-            <loc>https://w31rdr4v3n.github.io/tags/forensic/</loc><lastmod>2022-03-30T21:53:15&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
+            <loc>https://w31rdr4v3n.github.io/categories/elf/</loc><lastmod>2022-06-07T15:03:48&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
                         rel="alternate"
                         hreflang="fr"
-                        href="https://w31rdr4v3n.github.io/fr/tags/forensic/"
+                        href="https://w31rdr4v3n.github.io/fr/categories/elf/"
                         /><xhtml:link
                     rel="alternate"
                     hreflang="en"
-                    href="https://w31rdr4v3n.github.io/tags/forensic/"
+                    href="https://w31rdr4v3n.github.io/categories/elf/"
                     /></url><url>
-            <loc>https://w31rdr4v3n.github.io/tags/picoctf/</loc><lastmod>2022-03-30T21:53:15&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
+            <loc>https://w31rdr4v3n.github.io/tags/linux/</loc><lastmod>2022-06-07T15:03:48&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
                         rel="alternate"
                         hreflang="fr"
-                        href="https://w31rdr4v3n.github.io/fr/tags/picoctf/"
+                        href="https://w31rdr4v3n.github.io/fr/tags/linux/"
                         /><xhtml:link
                     rel="alternate"
                     hreflang="en"
-                    href="https://w31rdr4v3n.github.io/tags/picoctf/"
+                    href="https://w31rdr4v3n.github.io/tags/linux/"
                     /></url><url>
-            <loc>https://w31rdr4v3n.github.io/picoctf2022-writeup/</loc><lastmod>2022-03-30T21:53:15&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
+            <loc>https://w31rdr4v3n.github.io/categories/linux/</loc><lastmod>2022-06-07T15:03:48&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
                         rel="alternate"
                         hreflang="fr"
-                        href="https://w31rdr4v3n.github.io/fr/picoctf2022-writeup/"
+                        href="https://w31rdr4v3n.github.io/fr/categories/linux/"
                         /><xhtml:link
                     rel="alternate"
                     hreflang="en"
-                    href="https://w31rdr4v3n.github.io/picoctf2022-writeup/"
+                    href="https://w31rdr4v3n.github.io/categories/linux/"
                     /></url><url>
-            <loc>https://w31rdr4v3n.github.io/posts/</loc><lastmod>2022-03-30T21:53:15&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
+            <loc>https://w31rdr4v3n.github.io/linux-libraries/</loc><lastmod>2022-06-07T15:03:48&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
+                        rel="alternate"
+                        hreflang="fr"
+                        href="https://w31rdr4v3n.github.io/fr/linux-libraries/"
+                        /><xhtml:link
+                    rel="alternate"
+                    hreflang="en"
+                    href="https://w31rdr4v3n.github.io/linux-libraries/"
+                    /></url><url>
+            <loc>https://w31rdr4v3n.github.io/posts/</loc><lastmod>2022-06-07T15:03:48&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
                         rel="alternate"
                         hreflang="fr"
                         href="https://w31rdr4v3n.github.io/fr/posts/"
@@ -83,16 +74,7 @@
                     hreflang="en"
                     href="https://w31rdr4v3n.github.io/posts/"
                     /></url><url>
-            <loc>https://w31rdr4v3n.github.io/tags/pwn/</loc><lastmod>2022-03-30T21:53:15&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
-                        rel="alternate"
-                        hreflang="fr"
-                        href="https://w31rdr4v3n.github.io/fr/tags/pwn/"
-                        /><xhtml:link
-                    rel="alternate"
-                    hreflang="en"
-                    href="https://w31rdr4v3n.github.io/tags/pwn/"
-                    /></url><url>
-            <loc>https://w31rdr4v3n.github.io/</loc><lastmod>2022-03-30T21:53:15&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
+            <loc>https://w31rdr4v3n.github.io/</loc><lastmod>2022-06-07T15:03:48&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
                         rel="alternate"
                         hreflang="fr"
                         href="https://w31rdr4v3n.github.io/fr/"
@@ -101,16 +83,16 @@
                     hreflang="en"
                     href="https://w31rdr4v3n.github.io/"
                     /></url><url>
-            <loc>https://w31rdr4v3n.github.io/tags/reverse/</loc><lastmod>2022-03-30T21:53:15&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
+            <loc>https://w31rdr4v3n.github.io/tags/shared-libraries/</loc><lastmod>2022-06-07T15:03:48&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
                         rel="alternate"
                         hreflang="fr"
-                        href="https://w31rdr4v3n.github.io/fr/tags/reverse/"
+                        href="https://w31rdr4v3n.github.io/fr/tags/shared-libraries/"
                         /><xhtml:link
                     rel="alternate"
                     hreflang="en"
-                    href="https://w31rdr4v3n.github.io/tags/reverse/"
+                    href="https://w31rdr4v3n.github.io/tags/shared-libraries/"
                     /></url><url>
-            <loc>https://w31rdr4v3n.github.io/tags/</loc><lastmod>2022-03-30T21:53:15&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
+            <loc>https://w31rdr4v3n.github.io/tags/</loc><lastmod>2022-06-07T15:03:48&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
                         rel="alternate"
                         hreflang="fr"
                         href="https://w31rdr4v3n.github.io/fr/tags/"
@@ -118,6 +100,87 @@
                     rel="alternate"
                     hreflang="en"
                     href="https://w31rdr4v3n.github.io/tags/"
+                    /></url><url>
+            <loc>https://w31rdr4v3n.github.io/events/</loc><lastmod>2022-03-31T18:59:29&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority><xhtml:link
+                        rel="alternate"
+                        hreflang="fr"
+                        href="https://w31rdr4v3n.github.io/fr/events/"
+                        /><xhtml:link
+                    rel="alternate"
+                    hreflang="en"
+                    href="https://w31rdr4v3n.github.io/events/"
+                    /></url><url>
+            <loc>https://w31rdr4v3n.github.io/about/</loc><lastmod>2022-03-25T02:12:15&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority><xhtml:link
+                        rel="alternate"
+                        hreflang="fr"
+                        href="https://w31rdr4v3n.github.io/fr/about/"
+                        /><xhtml:link
+                    rel="alternate"
+                    hreflang="en"
+                    href="https://w31rdr4v3n.github.io/about/"
+                    /></url><url>
+            <loc>https://w31rdr4v3n.github.io/tags/crypto/</loc><lastmod>2022-03-30T21:53:15&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority><xhtml:link
+                        rel="alternate"
+                        hreflang="fr"
+                        href="https://w31rdr4v3n.github.io/fr/tags/crypto/"
+                        /><xhtml:link
+                    rel="alternate"
+                    hreflang="en"
+                    href="https://w31rdr4v3n.github.io/tags/crypto/"
+                    /></url><url>
+            <loc>https://w31rdr4v3n.github.io/categories/ctf/</loc><lastmod>2022-03-30T21:53:15&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority><xhtml:link
+                        rel="alternate"
+                        hreflang="fr"
+                        href="https://w31rdr4v3n.github.io/fr/categories/ctf/"
+                        /><xhtml:link
+                    rel="alternate"
+                    hreflang="en"
+                    href="https://w31rdr4v3n.github.io/categories/ctf/"
+                    /></url><url>
+            <loc>https://w31rdr4v3n.github.io/tags/forensic/</loc><lastmod>2022-03-30T21:53:15&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority><xhtml:link
+                        rel="alternate"
+                        hreflang="fr"
+                        href="https://w31rdr4v3n.github.io/fr/tags/forensic/"
+                        /><xhtml:link
+                    rel="alternate"
+                    hreflang="en"
+                    href="https://w31rdr4v3n.github.io/tags/forensic/"
+                    /></url><url>
+            <loc>https://w31rdr4v3n.github.io/tags/picoctf/</loc><lastmod>2022-03-30T21:53:15&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority><xhtml:link
+                        rel="alternate"
+                        hreflang="fr"
+                        href="https://w31rdr4v3n.github.io/fr/tags/picoctf/"
+                        /><xhtml:link
+                    rel="alternate"
+                    hreflang="en"
+                    href="https://w31rdr4v3n.github.io/tags/picoctf/"
+                    /></url><url>
+            <loc>https://w31rdr4v3n.github.io/picoctf2022-writeup/</loc><lastmod>2022-03-30T21:53:15&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority><xhtml:link
+                        rel="alternate"
+                        hreflang="fr"
+                        href="https://w31rdr4v3n.github.io/fr/picoctf2022-writeup/"
+                        /><xhtml:link
+                    rel="alternate"
+                    hreflang="en"
+                    href="https://w31rdr4v3n.github.io/picoctf2022-writeup/"
+                    /></url><url>
+            <loc>https://w31rdr4v3n.github.io/tags/pwn/</loc><lastmod>2022-03-30T21:53:15&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority><xhtml:link
+                        rel="alternate"
+                        hreflang="fr"
+                        href="https://w31rdr4v3n.github.io/fr/tags/pwn/"
+                        /><xhtml:link
+                    rel="alternate"
+                    hreflang="en"
+                    href="https://w31rdr4v3n.github.io/tags/pwn/"
+                    /></url><url>
+            <loc>https://w31rdr4v3n.github.io/tags/reverse/</loc><lastmod>2022-03-30T21:53:15&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority><xhtml:link
+                        rel="alternate"
+                        hreflang="fr"
+                        href="https://w31rdr4v3n.github.io/fr/tags/reverse/"
+                        /><xhtml:link
+                    rel="alternate"
+                    hreflang="en"
+                    href="https://w31rdr4v3n.github.io/tags/reverse/"
                     /></url><url>
             <loc>https://w31rdr4v3n.github.io/tags/ctf/</loc><lastmod>2021-12-23T21:22:57&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority><xhtml:link
                         rel="alternate"
