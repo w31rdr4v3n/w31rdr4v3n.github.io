@@ -101,3 +101,11 @@ Pour vérifier si l'exécutable est statiquement liée.
 Dans la prochaîche partie nous verrons les librairies dynamique.
 Prérequis : Base en Assembleur, GDB
 
+
+
+
+
+# References
+
+[IBM : Anatomy of Linux dynamic libraries](https://developer.ibm.com/tutorials/l-dynamic-libraries/)
+

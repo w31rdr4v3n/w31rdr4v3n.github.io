@@ -102,3 +102,11 @@ To check if the executable is statically linked.
 In the next part we will see the dynamic libraries.
 Prerequisites: Basic assembly, GDB
 
+
+
+
+
+# References
+
+[IBM : Anatomy of Linux dynamic libraries](https://developer.ibm.com/tutorials/l-dynamic-libraries/)
+
