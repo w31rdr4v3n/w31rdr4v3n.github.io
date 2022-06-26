@@ -98,7 +98,8 @@ Pour vérifier si l'exécutable est statiquement liée.
 
 ##  Les librairies dynamique
 
-Dans la prochaîche partie nous verrons les librairies dynamique.
+Dans la prochaîne partie nous verrons les librairies dynamique.
+
 Prérequis : Base en Assembleur, GDB
 
 

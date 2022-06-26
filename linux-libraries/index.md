@@ -100,6 +100,7 @@ To check if the executable is statically linked.
 ##  Dynamic libraries
 
 In the next part we will see the dynamic libraries.
+
 Prerequisites: Basic assembly, GDB
 
 
