@@ -47,15 +47,6 @@
                     hreflang="en"
                     href="https://w31rdr4v3n.github.io/tags/got/"
                     /></url><url>
-            <loc>https://w31rdr4v3n.github.io/linux-libraries-1/</loc><lastmod>2022-09-28T03:56:35-04:00</lastmod><changefreq>weekly</changefreq><priority>0.6</priority><xhtml:link
-                        rel="alternate"
-                        hreflang="fr"
-                        href="https://w31rdr4v3n.github.io/fr/linux-libraries-1/"
-                        /><xhtml:link
-                    rel="alternate"
-                    hreflang="en"
-                    href="https://w31rdr4v3n.github.io/linux-libraries-1/"
-                    /></url><url>
             <loc>https://w31rdr4v3n.github.io/tags/lazy-binding/</loc><lastmod>2022-09-28T03:56:35-04:00</lastmod><changefreq>weekly</changefreq><priority>0.6</priority><xhtml:link
                         rel="alternate"
                         hreflang="fr"
@@ -91,6 +82,15 @@
                     rel="alternate"
                     hreflang="en"
                     href="https://w31rdr4v3n.github.io/categories/linux/"
+                    /></url><url>
+            <loc>https://w31rdr4v3n.github.io/linux-libraries-1/</loc><lastmod>2022-09-28T03:56:35-04:00</lastmod><changefreq>weekly</changefreq><priority>0.6</priority><xhtml:link
+                        rel="alternate"
+                        hreflang="fr"
+                        href="https://w31rdr4v3n.github.io/fr/linux-libraries-1/"
+                        /><xhtml:link
+                    rel="alternate"
+                    hreflang="en"
+                    href="https://w31rdr4v3n.github.io/linux-libraries-1/"
                     /></url><url>
             <loc>https://w31rdr4v3n.github.io/</loc><lastmod>2022-09-28T03:56:35-04:00</lastmod><changefreq>weekly</changefreq><priority>0.6</priority><xhtml:link
                         rel="alternate"

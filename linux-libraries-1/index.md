@@ -1,4 +1,4 @@
-# Index
+# Linux libraries part 1
 
 # Linux libraries part 1
 In this part 1 about Linux libraries, we will talk about dynamically linked binaries. How symbols are dynamically resolved. The role of PLT & GOT and the linker.
