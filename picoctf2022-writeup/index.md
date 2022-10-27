@@ -1,5 +1,6 @@
 # picoCTF2022 Writeup
 
+# picoCTF 2022
 This article presents answers to the picoCTF 2022 challenges.
 <!--more-->
 

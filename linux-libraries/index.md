@@ -1,7 +1,8 @@
-# Linux libraries
+# Linux libraries part 0
 
 
 # Linux libraries part 0
+In this series of articles, I will explain what I understand about Linux libraries.
 <!--more-->
 
 In this series of articles, I will explain what I understand about Linux libraries.

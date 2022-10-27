@@ -1,0 +1,18 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>PLT - Tag - Official R4v3N Blog</title>
+        <link>https://w31rdr4v3n.github.io/tags/plt/</link>
+        <description>PLT - Tag - Official R4v3N Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Wed, 28 Sep 2022 03:56:35 -0400</lastBuildDate><atom:link href="https://w31rdr4v3n.github.io/tags/plt/" rel="self" type="application/rss+xml" /><item>
+    <title>Index</title>
+    <link>https://w31rdr4v3n.github.io/linux-libraries-1/</link>
+    <pubDate>Wed, 28 Sep 2022 03:56:35 -0400</pubDate>
+    <author>Author</author>
+    <guid>https://w31rdr4v3n.github.io/linux-libraries-1/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/linux-libraries.png" referrerpolicy="no-referrer">
+            </div><h1 id="linux-libraries-part-1">Linux libraries part 1</h1>
+<p>In this part 1 about Linux libraries, we will talk about dynamically linked binaries. How symbols are dynamically resolved. The role of PLT &amp; GOT and the linker.</p>]]></description>
+</item>
+</channel>
+</rss>

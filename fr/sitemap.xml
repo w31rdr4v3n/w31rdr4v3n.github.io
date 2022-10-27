@@ -2,7 +2,7 @@
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
     ><url>
-            <loc>https://w31rdr4v3n.github.io/fr/categories/</loc><lastmod>2022-06-07T15:04:12&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
+            <loc>https://w31rdr4v3n.github.io/fr/categories/</loc><lastmod>2022-09-28T03:56:49-04:00</lastmod><changefreq>weekly</changefreq><priority>0.6</priority><xhtml:link
                         rel="alternate"
                         hreflang="en"
                         href="https://w31rdr4v3n.github.io/categories/"
@@ -11,7 +11,7 @@
                     hreflang="fr"
                     href="https://w31rdr4v3n.github.io/fr/categories/"
                     /></url><url>
-            <loc>https://w31rdr4v3n.github.io/fr/tags/dynamic-linker/</loc><lastmod>2022-06-07T15:04:12&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
+            <loc>https://w31rdr4v3n.github.io/fr/tags/dynamic-linker/</loc><lastmod>2022-09-28T03:56:49-04:00</lastmod><changefreq>weekly</changefreq><priority>0.6</priority><xhtml:link
                         rel="alternate"
                         hreflang="en"
                         href="https://w31rdr4v3n.github.io/tags/dynamic-linker/"
@@ -20,7 +20,7 @@
                     hreflang="fr"
                     href="https://w31rdr4v3n.github.io/fr/tags/dynamic-linker/"
                     /></url><url>
-            <loc>https://w31rdr4v3n.github.io/fr/tags/elf/</loc><lastmod>2022-06-07T15:04:12&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
+            <loc>https://w31rdr4v3n.github.io/fr/tags/elf/</loc><lastmod>2022-09-28T03:56:49-04:00</lastmod><changefreq>weekly</changefreq><priority>0.6</priority><xhtml:link
                         rel="alternate"
                         hreflang="en"
                         href="https://w31rdr4v3n.github.io/tags/elf/"
@@ -29,7 +29,7 @@
                     hreflang="fr"
                     href="https://w31rdr4v3n.github.io/fr/tags/elf/"
                     /></url><url>
-            <loc>https://w31rdr4v3n.github.io/fr/categories/elf/</loc><lastmod>2022-06-07T15:04:12&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
+            <loc>https://w31rdr4v3n.github.io/fr/categories/elf/</loc><lastmod>2022-09-28T03:56:49-04:00</lastmod><changefreq>weekly</changefreq><priority>0.6</priority><xhtml:link
                         rel="alternate"
                         hreflang="en"
                         href="https://w31rdr4v3n.github.io/categories/elf/"
@@ -38,7 +38,34 @@
                     hreflang="fr"
                     href="https://w31rdr4v3n.github.io/fr/categories/elf/"
                     /></url><url>
-            <loc>https://w31rdr4v3n.github.io/fr/tags/linux/</loc><lastmod>2022-06-07T15:04:12&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
+            <loc>https://w31rdr4v3n.github.io/fr/tags/got/</loc><lastmod>2022-09-28T03:56:49-04:00</lastmod><changefreq>weekly</changefreq><priority>0.6</priority><xhtml:link
+                        rel="alternate"
+                        hreflang="en"
+                        href="https://w31rdr4v3n.github.io/tags/got/"
+                        /><xhtml:link
+                    rel="alternate"
+                    hreflang="fr"
+                    href="https://w31rdr4v3n.github.io/fr/tags/got/"
+                    /></url><url>
+            <loc>https://w31rdr4v3n.github.io/fr/tags/lazy-binding/</loc><lastmod>2022-09-28T03:56:49-04:00</lastmod><changefreq>weekly</changefreq><priority>0.6</priority><xhtml:link
+                        rel="alternate"
+                        hreflang="en"
+                        href="https://w31rdr4v3n.github.io/tags/lazy-binding/"
+                        /><xhtml:link
+                    rel="alternate"
+                    hreflang="fr"
+                    href="https://w31rdr4v3n.github.io/fr/tags/lazy-binding/"
+                    /></url><url>
+            <loc>https://w31rdr4v3n.github.io/fr/tags/ld/</loc><lastmod>2022-09-28T03:56:49-04:00</lastmod><changefreq>weekly</changefreq><priority>0.6</priority><xhtml:link
+                        rel="alternate"
+                        hreflang="en"
+                        href="https://w31rdr4v3n.github.io/tags/ld/"
+                        /><xhtml:link
+                    rel="alternate"
+                    hreflang="fr"
+                    href="https://w31rdr4v3n.github.io/fr/tags/ld/"
+                    /></url><url>
+            <loc>https://w31rdr4v3n.github.io/fr/tags/linux/</loc><lastmod>2022-09-28T03:56:49-04:00</lastmod><changefreq>weekly</changefreq><priority>0.6</priority><xhtml:link
                         rel="alternate"
                         hreflang="en"
                         href="https://w31rdr4v3n.github.io/tags/linux/"
@@ -47,7 +74,7 @@
                     hreflang="fr"
                     href="https://w31rdr4v3n.github.io/fr/tags/linux/"
                     /></url><url>
-            <loc>https://w31rdr4v3n.github.io/fr/categories/linux/</loc><lastmod>2022-06-07T15:04:12&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
+            <loc>https://w31rdr4v3n.github.io/fr/categories/linux/</loc><lastmod>2022-09-28T03:56:49-04:00</lastmod><changefreq>weekly</changefreq><priority>0.6</priority><xhtml:link
                         rel="alternate"
                         hreflang="en"
                         href="https://w31rdr4v3n.github.io/categories/linux/"
@@ -56,25 +83,16 @@
                     hreflang="fr"
                     href="https://w31rdr4v3n.github.io/fr/categories/linux/"
                     /></url><url>
-            <loc>https://w31rdr4v3n.github.io/fr/linux-libraries/</loc><lastmod>2022-06-07T15:04:12&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
+            <loc>https://w31rdr4v3n.github.io/fr/linux-libraries-1/</loc><lastmod>2022-09-28T03:56:49-04:00</lastmod><changefreq>weekly</changefreq><priority>0.6</priority><xhtml:link
                         rel="alternate"
                         hreflang="en"
-                        href="https://w31rdr4v3n.github.io/linux-libraries/"
+                        href="https://w31rdr4v3n.github.io/linux-libraries-1/"
                         /><xhtml:link
                     rel="alternate"
                     hreflang="fr"
-                    href="https://w31rdr4v3n.github.io/fr/linux-libraries/"
+                    href="https://w31rdr4v3n.github.io/fr/linux-libraries-1/"
                     /></url><url>
-            <loc>https://w31rdr4v3n.github.io/fr/posts/</loc><lastmod>2022-06-07T15:04:12&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
-                        rel="alternate"
-                        hreflang="en"
-                        href="https://w31rdr4v3n.github.io/posts/"
-                        /><xhtml:link
-                    rel="alternate"
-                    hreflang="fr"
-                    href="https://w31rdr4v3n.github.io/fr/posts/"
-                    /></url><url>
-            <loc>https://w31rdr4v3n.github.io/fr/</loc><lastmod>2022-06-07T15:04:12&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
+            <loc>https://w31rdr4v3n.github.io/fr/</loc><lastmod>2022-09-28T03:56:49-04:00</lastmod><changefreq>weekly</changefreq><priority>0.6</priority><xhtml:link
                         rel="alternate"
                         hreflang="en"
                         href="https://w31rdr4v3n.github.io/"
@@ -83,7 +101,34 @@
                     hreflang="fr"
                     href="https://w31rdr4v3n.github.io/fr/"
                     /></url><url>
-            <loc>https://w31rdr4v3n.github.io/fr/tags/shared-libraries/</loc><lastmod>2022-06-07T15:04:12&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
+            <loc>https://w31rdr4v3n.github.io/fr/tags/plt/</loc><lastmod>2022-09-28T03:56:49-04:00</lastmod><changefreq>weekly</changefreq><priority>0.6</priority><xhtml:link
+                        rel="alternate"
+                        hreflang="en"
+                        href="https://w31rdr4v3n.github.io/tags/plt/"
+                        /><xhtml:link
+                    rel="alternate"
+                    hreflang="fr"
+                    href="https://w31rdr4v3n.github.io/fr/tags/plt/"
+                    /></url><url>
+            <loc>https://w31rdr4v3n.github.io/fr/posts/</loc><lastmod>2022-09-28T03:56:49-04:00</lastmod><changefreq>weekly</changefreq><priority>0.6</priority><xhtml:link
+                        rel="alternate"
+                        hreflang="en"
+                        href="https://w31rdr4v3n.github.io/posts/"
+                        /><xhtml:link
+                    rel="alternate"
+                    hreflang="fr"
+                    href="https://w31rdr4v3n.github.io/fr/posts/"
+                    /></url><url>
+            <loc>https://w31rdr4v3n.github.io/fr/tags/pwn/</loc><lastmod>2022-09-28T03:56:49-04:00</lastmod><changefreq>weekly</changefreq><priority>0.6</priority><xhtml:link
+                        rel="alternate"
+                        hreflang="en"
+                        href="https://w31rdr4v3n.github.io/tags/pwn/"
+                        /><xhtml:link
+                    rel="alternate"
+                    hreflang="fr"
+                    href="https://w31rdr4v3n.github.io/fr/tags/pwn/"
+                    /></url><url>
+            <loc>https://w31rdr4v3n.github.io/fr/tags/shared-libraries/</loc><lastmod>2022-09-28T03:56:49-04:00</lastmod><changefreq>weekly</changefreq><priority>0.6</priority><xhtml:link
                         rel="alternate"
                         hreflang="en"
                         href="https://w31rdr4v3n.github.io/tags/shared-libraries/"
@@ -92,7 +137,7 @@
                     hreflang="fr"
                     href="https://w31rdr4v3n.github.io/fr/tags/shared-libraries/"
                     /></url><url>
-            <loc>https://w31rdr4v3n.github.io/fr/tags/</loc><lastmod>2022-06-07T15:04:12&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority><xhtml:link
+            <loc>https://w31rdr4v3n.github.io/fr/tags/</loc><lastmod>2022-09-28T03:56:49-04:00</lastmod><changefreq>weekly</changefreq><priority>0.6</priority><xhtml:link
                         rel="alternate"
                         hreflang="en"
                         href="https://w31rdr4v3n.github.io/tags/"
@@ -100,6 +145,15 @@
                     rel="alternate"
                     hreflang="fr"
                     href="https://w31rdr4v3n.github.io/fr/tags/"
+                    /></url><url>
+            <loc>https://w31rdr4v3n.github.io/fr/linux-libraries/</loc><lastmod>2022-06-07T15:04:12&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority><xhtml:link
+                        rel="alternate"
+                        hreflang="en"
+                        href="https://w31rdr4v3n.github.io/linux-libraries/"
+                        /><xhtml:link
+                    rel="alternate"
+                    hreflang="fr"
+                    href="https://w31rdr4v3n.github.io/fr/linux-libraries/"
                     /></url><url>
             <loc>https://w31rdr4v3n.github.io/fr/events/</loc><lastmod>2022-03-31T18:59:15&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority><xhtml:link
                         rel="alternate"
@@ -110,7 +164,7 @@
                     hreflang="fr"
                     href="https://w31rdr4v3n.github.io/fr/events/"
                     /></url><url>
-            <loc>https://w31rdr4v3n.github.io/fr/about/</loc><lastmod>2022-03-25T02:12:15&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority><xhtml:link
+            <loc>https://w31rdr4v3n.github.io/fr/about/</loc><lastmod>2022-03-30T22:13:51&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority><xhtml:link
                         rel="alternate"
                         hreflang="en"
                         href="https://w31rdr4v3n.github.io/about/"
@@ -163,15 +217,6 @@
                     rel="alternate"
                     hreflang="fr"
                     href="https://w31rdr4v3n.github.io/fr/picoctf2022-writeup/"
-                    /></url><url>
-            <loc>https://w31rdr4v3n.github.io/fr/tags/pwn/</loc><lastmod>2022-03-29T05:17:59&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority><xhtml:link
-                        rel="alternate"
-                        hreflang="en"
-                        href="https://w31rdr4v3n.github.io/tags/pwn/"
-                        /><xhtml:link
-                    rel="alternate"
-                    hreflang="fr"
-                    href="https://w31rdr4v3n.github.io/fr/tags/pwn/"
                     /></url><url>
             <loc>https://w31rdr4v3n.github.io/fr/tags/reverse/</loc><lastmod>2022-03-29T05:17:59&#43;01:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority><xhtml:link
                         rel="alternate"

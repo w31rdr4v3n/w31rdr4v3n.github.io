@@ -1,36 +1,53 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
-        <title>R4v3N Blog</title>
+        <title>Official R4v3N Blog</title>
         <link>https://w31rdr4v3n.github.io/fr/</link>
-        <description>Official R4v3N Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>fr</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Tue, 07 Jun 2022 15:04:12 &#43;0100</lastBuildDate>
+        <description>All about cybersecurity and CTF</description>
+        <generator>Hugo -- gohugo.io</generator><language>fr</language><lastBuildDate>Wed, 28 Sep 2022 03:56:49 -0400</lastBuildDate>
             <atom:link href="https://w31rdr4v3n.github.io/fr/index.xml" rel="self" type="application/rss+xml" />
         <item>
-    <title>Linux libraries</title>
+    <title>Linux libraries part 1</title>
+    <link>https://w31rdr4v3n.github.io/fr/linux-libraries-1/</link>
+    <pubDate>Wed, 28 Sep 2022 03:56:49 -0400</pubDate>
+    <author>R4v3N</author>
+    <guid>https://w31rdr4v3n.github.io/fr/linux-libraries-1/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/linux-libraries.png" referrerpolicy="no-referrer">
+            </div><h1 id="linux-libraries-part-1">Linux libraries part 1</h1>
+<p>Dans cette partie 1 sur les librairies Linux, nous parlerons des binaires liés dynamiquement. Comment les symboles sont résolus dynamiquement. Le rôle du PLT &amp; GOT et du linker.</p>]]></description>
+</item>
+<item>
+    <title>Linux libraries part 0</title>
     <link>https://w31rdr4v3n.github.io/fr/linux-libraries/</link>
     <pubDate>Tue, 07 Jun 2022 15:04:12 &#43;0100</pubDate>
-    <author>Auteur</author>
+    <author>_R4v3N</author>
     <guid>https://w31rdr4v3n.github.io/fr/linux-libraries/</guid>
     <description><![CDATA[<div class="featured-image">
                 <img src="/linux-libraries.png" referrerpolicy="no-referrer">
-            </div><h1 id="librairies-linux-part0">Librairies Linux part0</h1>]]></description>
-</item><item>
+            </div><h1 id="librairies-linux-part0">Librairies Linux part0</h1>
+<p>Dans cette série d&rsquo;articles, j&rsquo;expliquerai ce que j&rsquo;ai compris des librairies Linux.</p>]]></description>
+</item>
+<item>
     <title>picoCTF2022 Writeup</title>
     <link>https://w31rdr4v3n.github.io/fr/picoctf2022-writeup/</link>
     <pubDate>Tue, 29 Mar 2022 05:17:59 &#43;0100</pubDate>
-    <author>Auteur</author>
+    <author>R4v3N</author>
     <guid>https://w31rdr4v3n.github.io/fr/picoctf2022-writeup/</guid>
     <description><![CDATA[<div class="featured-image">
                 <img src="/picoctf-logo-social.png" referrerpolicy="no-referrer">
-            </div><p>Cet article présente des corrigés des défis du picoCTF 2022.</p>]]></description>
-</item><item>
+            </div><h1 id="picoctf-2022">picoCTF 2022</h1>
+<p>Cet article présente des corrigés des défis du picoCTF 2022.</p>]]></description>
+</item>
+<item>
     <title>TFC CTF 2021 Writeup</title>
     <link>https://w31rdr4v3n.github.io/fr/tfcctf2021-writeup/</link>
     <pubDate>Thu, 23 Dec 2021 05:53:43 &#43;0100</pubDate>
-    <author>Auteur</author>
+    <author>_R4v3N</author>
     <guid>https://w31rdr4v3n.github.io/fr/tfcctf2021-writeup/</guid>
     <description><![CDATA[<div class="featured-image">
                 <img src="/tfc.png" referrerpolicy="no-referrer">
-            </div><p>Cet article présente des corrigés des défis du TFC CTF 2021.</p>]]></description>
-</item></channel>
+            </div><h1 id="tfc-ctf-2021">TFC CTF 2021</h1>
+<p>Cet article présente des corrigés des défis du TFC CTF 2021.</p>]]></description>
+</item>
+</channel>
 </rss>

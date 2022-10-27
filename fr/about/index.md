@@ -15,6 +15,3 @@
 >Exploit Dev
 >
 >CTF Player [Habileté: Pwn, Reverse]
->
->Discord: R4v3N#7482
-

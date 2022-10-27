@@ -1,6 +1,7 @@
-# Linux libraries
+# Linux libraries part 0
 
 # Librairies Linux part0
+Dans cette série d'articles, j'expliquerai ce que j'ai compris des librairies Linux.
 <!--more-->
 
 Dans cette série d'articles, j'expliquerai ce que j'ai compris des librairies Linux.
@@ -101,9 +102,6 @@ Pour vérifier si l'exécutable est statiquement liée.
 Dans la prochaîne partie nous verrons les librairies dynamique.
 
 Prérequis : Base en Assembleur, GDB
-
-
-
 
 
 # References

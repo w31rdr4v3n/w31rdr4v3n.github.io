@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Linux libraries part 1 - Official R4v3N Blog</title><meta name="Description" content="All about cybersecurity and CTF"><meta property="og:title" content="Linux libraries part 1" />
+<meta property="og:description" content="Linux libraries part 1
+Dans cette partie 1 sur les librairies Linux, nous parlerons des binaires liés dynamiquement. Comment les symboles sont résolus dynamiquement. Le rôle du PLT &amp; GOT et du linker." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://w31rdr4v3n.github.io/fr/linux-libraries-1/" /><meta property="og:image" content="https://raw.githubusercontent.com/w31rdr4v3n/w31rdr4v3n.github.io/main/linux-libraries-1/linux-libraries.png" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-09-28T03:56:49-04:00" />
+<meta property="article:modified_time" content="2022-09-28T03:56:49-04:00" /><meta property="og:site_name" content="Official R4v3N Blog" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://raw.githubusercontent.com/w31rdr4v3n/w31rdr4v3n.github.io/main/linux-libraries-1/linux-libraries.png"/>
+
+<meta name="twitter:title" content="Linux libraries part 1"/>
+<meta name="twitter:description" content="Linux libraries part 1
+Dans cette partie 1 sur les librairies Linux, nous parlerons des binaires liés dynamiquement. Comment les symboles sont résolus dynamiquement. Le rôle du PLT &amp; GOT et du linker."/>
+<meta name="application-name" content="R4v3N">
+<meta name="apple-mobile-web-app-title" content="R4v3N"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/images/R4v3N.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://w31rdr4v3n.github.io/fr/linux-libraries-1/" /><link rel="prev" href="https://w31rdr4v3n.github.io/fr/linux-libraries/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Linux libraries part 1",
+        "inLanguage": "fr",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/w31rdr4v3n.github.io\/fr\/linux-libraries-1\/"
+        },"genre": "posts","keywords": "Linux, ELF, Dynamic Linker, Shared libraries, PLT, GOT, LD, Lazy binding, pwn","wordcount":  1579 ,
+        "url": "https:\/\/w31rdr4v3n.github.io\/fr\/linux-libraries-1\/","datePublished": "2022-09-28T03:56:49-04:00","dateModified": "2022-09-28T03:56:49-04:00","publisher": {
+            "@type": "Organization",
+            "name": "R4v3N","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/w31rdr4v3n.github.io\/images\/R4v3N.png",
+                    "width":  500 ,
+                    "height":  500 
+                }},"author": {
+                "@type": "Person",
+                "name": "R4v3N"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/fr/" title="Official R4v3N Blog">R4v3N</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/fr/posts/"> Postes </a><a class="menu-item" href="/fr/tags/"> Balises </a><a class="menu-item" href="/fr/categories/"> Catégories </a><a class="menu-item" href="/fr/about/"> À propos </a><a class="menu-item" href="/fr/events/"> Evénements </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Rechercher des titres, des contenus..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Chercher">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clair">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Changer de Thème">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="Choisir la langue">
+                    <i class="fa fa-globe" aria-hidden="true"></i>                      
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/linux-libraries-1/">English</option><option value="/fr/linux-libraries-1/" selected>Français</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/fr/" title="Official R4v3N Blog">R4v3N</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Rechercher des titres, des contenus..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Chercher">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clair">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Annuler
+                    </a>
+                </div><a class="menu-item" href="/fr/posts/" title="">Postes</a><a class="menu-item" href="/fr/tags/" title="">Balises</a><a class="menu-item" href="/fr/categories/" title="">Catégories</a><a class="menu-item" href="/fr/about/" title="">À propos</a><a class="menu-item" href="/fr/events/" title="">Evénements</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Changer de Thème">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="Choisir la langue">
+                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/linux-libraries-1/">English</option><option value="/fr/linux-libraries-1/" selected>Français</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contenu</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Linux libraries part 1</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://twitter.com/w31rdr4v3n" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>R4v3N</a></span>&nbsp;<span class="post-category">inclus dans <a href="/fr/categories/linux/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Linux</a>&nbsp;<a href="/fr/categories/elf/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>ELF</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-09-28">2022-09-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1579 mots&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;8 minutes&nbsp;<span id="/fr/linux-libraries-1/" class="leancloud_visitors" data-flag-title="Linux libraries part 1">
+                        <i class="far fa-eye fa-fw" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;vues
+                    </span>&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/linux-libraries.png"
+        data-srcset="/fr/linux-libraries-1/linux-libraries.png, /fr/linux-libraries-1/linux-libraries.png 1.5x, /fr/linux-libraries-1/linux-libraries.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/linux-libraries.png"
+        title="/fr/linux-libraries-1/linux-libraries.png" width="1500" height="500" /></div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contenu</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#0x0-intro">0x0 Intro</a></li>
+    <li><a href="#0x1-le-linker-dynamique">0x1 Le linker dynamique</a></li>
+    <li><a href="#0x2-plt--got--relocation">0x2 PLT &amp; GOT | relocation</a></li>
+    <li><a href="#0x3-exploitation">0x3 Exploitation</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="linux-libraries-part-1">Linux libraries part 1</h1>
+<p>Dans cette partie 1 sur les librairies Linux, nous parlerons des binaires liés dynamiquement. Comment les symboles sont résolus dynamiquement. Le rôle du PLT &amp; GOT et du linker.</p>
+<blockquote>
+<h2 id="0x0-intro">0x0 Intro</h2>
+</blockquote>
+<p>Le binaire statiquement lié intègre toutes les bibliothèques dont il a besoin pour fonctionner au moment de la compilation, en revanche ce n&rsquo;est pas le cas pour le binaire dynamiquement lié.</p>
+<p>Reprenons l&rsquo;image du part0.</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/resolv.png"
+        data-srcset="/fr/linux-libraries-1/datas/resolv.png, /fr/linux-libraries-1/datas/resolv.png 1.5x, /fr/linux-libraries-1/datas/resolv.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/resolv.png"
+        title="resolv" width="1332" height="343" /></p>
+<p>Pour le statiquement lié, nous avons un call directe sur la fonction <strong>printf</strong>.</p>
+<p>Désassemblons et regardons à l&rsquo;intérieur.</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/staticprintf.png"
+        data-srcset="/fr/linux-libraries-1/datas/staticprintf.png, /fr/linux-libraries-1/datas/staticprintf.png 1.5x, /fr/linux-libraries-1/datas/staticprintf.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/staticprintf.png"
+        title="staticprintf" width="782" height="662" /></p>
+<p>Comme on peut le voir, nous avons évidemment le code du <strong>printf</strong>.</p>
+<div class="details admonition question open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-question-circle fa-fw" aria-hidden="true"></i>Thinking<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">Quand est-il pour le binaire dynamiquement lié ?</div>
+        </div>
+    </div>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/thinking.jpg"
+        data-srcset="/fr/linux-libraries-1/datas/thinking.jpg, /fr/linux-libraries-1/datas/thinking.jpg 1.5x, /fr/linux-libraries-1/datas/thinking.jpg 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/thinking.jpg"
+        title="thinking" width="716" height="592" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// ami.c
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">printf</span><span class="p">(</span><span class="s">&#34;I&#39;m _R4v3n&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">gcc -m32 -o ami ami.c
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/printf.png"
+        data-srcset="/fr/linux-libraries-1/datas/printf.png, /fr/linux-libraries-1/datas/printf.png 1.5x, /fr/linux-libraries-1/datas/printf.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/printf.png"
+        title="printf" width="514" height="419" /></p>
+<p>D&rsquo;abord on peut constater qu&rsquo;au lieu de <strong>printf</strong> on a <strong>printf@plt</strong>.</p>
+<p>Désassemblons quand même et voyons ce qui s&rsquo;y trouve.</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/printfplt.png"
+        data-srcset="/fr/linux-libraries-1/datas/printfplt.png, /fr/linux-libraries-1/datas/printfplt.png 1.5x, /fr/linux-libraries-1/datas/printfplt.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/printfplt.png"
+        title="printfplt" width="424" height="122" /></p>
+<p>Nous voyons que nous n&rsquo;avons pas directement le code du <strong>printf</strong> mais un jump vers un emplacement suivi d&rsquo;un push et d&rsquo;un jump à la fin.</p>
+<div class="details admonition question open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-question-circle fa-fw" aria-hidden="true"></i>Thinking<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">Alors comment le <strong>printf</strong> est résolu ?</div>
+        </div>
+    </div>
+<blockquote>
+<h2 id="0x1-le-linker-dynamique">0x1 Le linker dynamique</h2>
+</blockquote>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/interp.png"
+        data-srcset="/fr/linux-libraries-1/datas/interp.png, /fr/linux-libraries-1/datas/interp.png 1.5x, /fr/linux-libraries-1/datas/interp.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/interp.png"
+        title="interp" width="1015" height="552" /></p>
+<p>Au démarrage d&rsquo;un binaire ELF lié dynamiquement, le noyau charge l&rsquo;image ELF du binaire dans la mémoire virtuelle de l&rsquo;espace utilisateur.</p>
+<p>Au chargement, une section .interp est détectée par le noyau.</p>
+<p>Cette section contient le nom du chemin (path) d&rsquo;un interpréteur de programme.</p>
+<p>Il s&rsquo;agit de l&rsquo;éditeur de liens dynamiques, <strong>/lib64/ld-linux-x86-64.so.2</strong> dans mon cas sur l&rsquo;image ci-dessus.</p>
+<p>Affichons le contenu de la section .interp et voyons concrètement ce qu&rsquo;elle contient.</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/readelfinterp.png"
+        data-srcset="/fr/linux-libraries-1/datas/readelfinterp.png, /fr/linux-libraries-1/datas/readelfinterp.png 1.5x, /fr/linux-libraries-1/datas/readelfinterp.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/readelfinterp.png"
+        title="readelfinterp" width="358" height="80" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/objdumpinterp.png"
+        data-srcset="/fr/linux-libraries-1/datas/objdumpinterp.png, /fr/linux-libraries-1/datas/objdumpinterp.png 1.5x, /fr/linux-libraries-1/datas/objdumpinterp.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/objdumpinterp.png"
+        title="objdumpinterp" width="494" height="126" /></p>
+<p>Évidemment la section .interp contient le path de l&rsquo;éditeur de liens dynamiques.</p>
+<p>Le noyau démarrera l&rsquo;éditeur de liens dynamiques, qui s&rsquo;initialise et charge les objets partagés dont le binaire a besoin.</p>
+<p>Affichons la liste des objets partagés dont le binaire a besoin avec la commande <strong>ldd</strong>.</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/lddami.png"
+        data-srcset="/fr/linux-libraries-1/datas/lddami.png, /fr/linux-libraries-1/datas/lddami.png 1.5x, /fr/linux-libraries-1/datas/lddami.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/lddami.png"
+        title="lddami" width="524" height="86" /></p>
+<p>Une fois que l&rsquo;éditeur de liens termine son travail, le programme d&rsquo;origine commence son exécution.</p>
+<p>Au cours de l&rsquo;exécution, l&rsquo;éditeur de liens sera encore appelé pour la résolution de symbole.</p>
+<p>En fait, tous les symboles ne sont pas résolus à l&rsquo;exécution.</p>
+<p>Tant qu&rsquo;un symbole n&rsquo;est pas réellement utilisé, il n&rsquo;est pas résolu: on appelle ce processus le <strong>Lazy binding</strong>.</p>
+<p>Quand une fonction est appelée pour la première fois, l&rsquo;<strong>éditeur de liens</strong> recherche l&rsquo;adresse de cette fonction dans la <strong>libc</strong> et fournie un mécanisme pour l&rsquo;appel de la fonction: c&rsquo;est ce qu&rsquo;on appelle <strong>relocation</strong>.</p>
+<div class="details admonition question open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-question-circle fa-fw" aria-hidden="true"></i>Thinking<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">Comment se déroule alors le processus de résolution de symbole ?</div>
+        </div>
+    </div>
+<blockquote>
+<h2 id="0x2-plt--got--relocation">0x2 PLT &amp; GOT | relocation</h2>
+</blockquote>
+<p>Plusieurs sections interviennent dans ce processus de résolution.</p>
+<ul>
+<li>
+<p><strong>.plt</strong> : Procedure Linkage Table (table de liaison de procédures).
+Elle est utilisée pour appeler des procédures/fonctions externes dont l&rsquo;adresse n&rsquo;est pas connue au moment de la liaison et doit être résolue par l&rsquo;éditeur de liens dynamiques au moment de l&rsquo;exécution. Ça contient un morceau de code qui recherche les adresses dans la section <strong>.got.plt</strong> et saute à la bonne adresse si l&rsquo;adresse est déjà résolue, soit déclenche le code dans l&rsquo;<strong>éditeur de liens</strong> pour rechercher l&rsquo;adresse.</p>
+</li>
+<li>
+<p><strong>.got</strong> :  Global Offset Table
+Il s&rsquo;agit de la table réelle des décalages remplie par l&rsquo;<strong>éditeur de liens</strong> pour les symboles externes.</p>
+</li>
+<li>
+<p><strong>.got.plt</strong> : Il est également une partie de la <strong>.got</strong>.
+Il contient les adresses cibles (après qu&rsquo;elles ont été recherchées) ou une adresse de retour dans le <strong>.plt</strong> pour déclencher la recherche.</p>
+</li>
+</ul>
+<p>Voyons un peu plus en pratique comment se passe la résolution du symbole et quel est le rôle de ces sections.</p>
+<p>Prenons ce code</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// ami.c
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">printf</span><span class="p">(</span><span class="s">&#34;I&#39;m _R4v3n&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Compilons et débuggons avec GDB pour mieux voir.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">gcc -m32 -o ami ami.c
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Dans mon cas je vais utiliser le plugin <a href="https://github.com/hugsy/gef" target="_blank" rel="noopener noreffer ">GEF</a>.</p>
+<p>Le main:</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/printf.png"
+        data-srcset="/fr/linux-libraries-1/datas/printf.png, /fr/linux-libraries-1/datas/printf.png 1.5x, /fr/linux-libraries-1/datas/printf.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/printf.png"
+        title="printf" width="514" height="419" /></p>
+<p>Puis un call sur <strong>printf@plt</strong></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/infofiles.png"
+        data-srcset="/fr/linux-libraries-1/datas/infofiles.png, /fr/linux-libraries-1/datas/infofiles.png 1.5x, /fr/linux-libraries-1/datas/infofiles.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/infofiles.png"
+        title="infofiles" width="625" height="505" /></p>
+<p>L&rsquo;adresse de notre call de <strong>printf@plt</strong> pointe dans la section <strong>.plt</strong>.</p>
+<p>Autrement dit, l&rsquo;adresse 0x1040 de <strong>printf@plt</strong> se situe dans la plage <strong>0x00001020 - 0x00001060</strong> qui est celle de la section <strong>.plt</strong>.</p>
+<p>Le contenu de la section <strong>.plt</strong>:</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/disasplt.png"
+        data-srcset="/fr/linux-libraries-1/datas/disasplt.png, /fr/linux-libraries-1/datas/disasplt.png 1.5x, /fr/linux-libraries-1/datas/disasplt.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/disasplt.png"
+        title="disasplt" width="619" height="283" /></p>
+<p>La section .plt est composée de sous-sections qu&rsquo;on peut appeler <strong>entré</strong>.</p>
+<p>Ici nous avons 4 entrées: entrée 0, 1, 2, 3 composée chacune de trois instructions.</p>
+<p>L&rsquo;entrée 0 est un peu spéciale, les autres entrées suivent le même schéma: nous avons un <strong>jump</strong> suivi d&rsquo;un <strong>push</strong> et d&rsquo;un <strong>jump</strong>.</p>
+<ul>
+<li>
+<p>L&rsquo;entre 2 pour <strong>printf</strong></p>
+</li>
+<li>
+<p>L&rsquo;entre 3 pour <strong>exit</strong></p>
+</li>
+</ul>
+<p>Au niveau de la première instruction de chaque entré, nous avons un jump vers un pointeur.</p>
+<p>Le processeur déréférencera le pointeur et sautera à l&rsquo;adresse obtenue.</p>
+<p>Si on jette un petit coup d&rsquo;oeil, on constate que ces adresses obtenues par déréférencement sont proches, y compris celui de l&rsquo;entrée 0.</p>
+<p>Pour ça, mettons un breakpoint au niveau du call de <strong>printf@plt</strong> et lançons le programme pour mieux voir.</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/breakpoint0.png"
+        data-srcset="/fr/linux-libraries-1/datas/breakpoint0.png, /fr/linux-libraries-1/datas/breakpoint0.png 1.5x, /fr/linux-libraries-1/datas/breakpoint0.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/breakpoint0.png"
+        title="breakpoint0" width="1026" height="481" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/infofiles0.png"
+        data-srcset="/fr/linux-libraries-1/datas/infofiles0.png, /fr/linux-libraries-1/datas/infofiles0.png 1.5x, /fr/linux-libraries-1/datas/infofiles0.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/infofiles0.png"
+        title="infofiles0" width="675" height="514" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/xplt.png"
+        data-srcset="/fr/linux-libraries-1/datas/xplt.png, /fr/linux-libraries-1/datas/xplt.png 1.5x, /fr/linux-libraries-1/datas/xplt.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/xplt.png"
+        title="xplt" width="1008" height="434" /></p>
+<p>Évidemment ces adresses sont proches <strong>(0x56558ffc, 0x56559000, 0x56559004, 0x56559008)</strong> et pointent toutes dans la section <strong>.got.plt</strong>.</p>
+<p>Nous, notre call de <strong>printf@plt</strong> saute directement à l&rsquo;adresse <strong>0x56556040</strong> dans la section .plt, suivons ça.</p>
+<p>La première instruction est un jump dans le <strong>.got.plt</strong> à l&rsquo;adresse <strong>0x56556046</strong> obtenu par déréférencement du pointeur <strong>DWORD PTR [ebx+0x10]</strong>.</p>
+<p>Affichons ce qui se trouve à cette adresse obtenue.</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/printf2got.png"
+        data-srcset="/fr/linux-libraries-1/datas/printf2got.png, /fr/linux-libraries-1/datas/printf2got.png 1.5x, /fr/linux-libraries-1/datas/printf2got.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/printf2got.png"
+        title="printf2got" width="686" height="382" /></p>
+<div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw" aria-hidden="true"></i>Keep<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">$ebx+0x10 &mdash;-&gt; 0x56559004 (got.plt) &ndash;&gt; 0x56556046 (plt)</div>
+        </div>
+    </div>
+<p>Nous pouvons constater qu&rsquo;il s&rsquo;agit de l&rsquo;adresse de l&rsquo;instruction suivante dans le <strong>plt</strong> : <code> 0x56556046 &lt;printf@plt+6&gt;:   push   0x8</code></p>
+<p>Autrement dit, ça nous ramène a l&rsquo;instruction suivante.</p>
+<p>Normalement nous devons obtenir l&rsquo;adresse de <strong>printf</strong> à cette adresse <strong>0x56559004</strong> dans le <strong>.got.plt</strong> mais nous avons l&rsquo;adresse de l&rsquo;instruction suivante.</p>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw" aria-hidden="true"></i>Tip<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">Vous vous êtes sans doute demandé pourquoi.</div>
+        </div>
+    </div>
+<p>Si vous ne vous êtes pas posé la question alors ça ne fait rien.</p>
+<p>Cela s&rsquo;explique par le fait que nous n&rsquo;avons jamais appelé <strong>printf</strong> avant et que nous devons déclencher la première recherche.</p>
+<p>Je parle de la recherche de l&rsquo;adresse de <strong>printf</strong> dans la <strong>libc</strong>, bien sûr.</p>
+<p>Une fois à l&rsquo;instruction suivante, l&rsquo;offset <strong>0x8</strong> est poussés sur la pile.</p>
+<p>Après ça, nous avons un jump à l&rsquo;adresse <strong>0x56556020</strong>, ça nous amène à l&rsquo;entrée 0 de <strong>.plt</strong></p>
+<p>À l&rsquo;entrée 0, nous avons quatres instructions.</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/entre0plt.png"
+        data-srcset="/fr/linux-libraries-1/datas/entre0plt.png, /fr/linux-libraries-1/datas/entre0plt.png 1.5x, /fr/linux-libraries-1/datas/entre0plt.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/entre0plt.png"
+        title="entre0plt" width="649" height="259" /></p>
+<p>La premiere empile la valeur <strong>0x56558ff8</strong>, qui se trouve dans le <strong>.got.plt</strong> et qui pointe sur <strong>0xf7ffd9e0</strong> dans la section <strong>.bss</strong> du linker.</p>
+<div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw" aria-hidden="true"></i>Keep<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">$ebx+0x4 &mdash;-&gt; 0x56558ff8 (got.plt) &ndash;&gt; 0xf7ffd9e0 (.bss in /lib/ld-linux.so.2)</div>
+        </div>
+    </div>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/pushbssld.png"
+        data-srcset="/fr/linux-libraries-1/datas/pushbssld.png, /fr/linux-libraries-1/datas/pushbssld.png 1.5x, /fr/linux-libraries-1/datas/pushbssld.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/pushbssld.png"
+        title="pushbssld" width="621" height="296" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/bssld.png"
+        data-srcset="/fr/linux-libraries-1/datas/bssld.png, /fr/linux-libraries-1/datas/bssld.png 1.5x, /fr/linux-libraries-1/datas/bssld.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/bssld.png"
+        title="bssld" width="629" height="121" /></p>
+<p>À la deuxième instruction, nous avons un jump vers l&rsquo;adresse <strong>0xf7fdc1b0</strong>, qui se trouve dans le <strong>.text</strong> du linker.</p>
+<div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw" aria-hidden="true"></i>Keep<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">$ebx+0x8 &mdash;-&gt; 0x56558ffc (got.plt) &ndash;&gt; 0xf7fdc1b0 (.text in /lib/ld-linux.so.2)</div>
+        </div>
+    </div>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/jumptextld.png"
+        data-srcset="/fr/linux-libraries-1/datas/jumptextld.png, /fr/linux-libraries-1/datas/jumptextld.png 1.5x, /fr/linux-libraries-1/datas/jumptextld.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/jumptextld.png"
+        title="jumptextld" width="647" height="311" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/textld.png"
+        data-srcset="/fr/linux-libraries-1/datas/textld.png, /fr/linux-libraries-1/datas/textld.png 1.5x, /fr/linux-libraries-1/datas/textld.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/textld.png"
+        title="textld" width="642" height="217" /></p>
+<p>Comme c&rsquo;est la première fois qu&rsquo;on appelle <strong>printf</strong>, l&rsquo;<strong>éditeur de liens(linker)</strong> est appelé pour chercher l&rsquo;adresse de <strong>printf</strong> et mettre à jour le <strong>GOT</strong>.</p>
+<p>Jetons un coup d&rsquo;œil dans cette section <strong>.text</strong> de l&rsquo;éditeur de liens à partir de l&rsquo;adresse obtenue.</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/textld1b0.png"
+        data-srcset="/fr/linux-libraries-1/datas/textld1b0.png, /fr/linux-libraries-1/datas/textld1b0.png 1.5x, /fr/linux-libraries-1/datas/textld1b0.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/textld1b0.png"
+        title="textld1b0" width="434" height="274" /></p>
+<p>Ce n&rsquo;est pas vraiment la fonction de résolution des adresses mais elle appelle simplement la véritable fonction de résolution.</p>
+<div class="details admonition question open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-question-circle fa-fw" aria-hidden="true"></i>Thinking<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">Comment sait-elle que c&rsquo;est la résolution de <strong>printf</strong> mais pas de <strong>scanf</strong> ?</div>
+        </div>
+    </div>
+<p>Pour le savoir, mettons un breakpoint à l&rsquo;adresse <strong>0xf7fdc1b0</strong> dans le <strong>.text</strong> du <strong>linker</strong> et vérifions les valeurs passes en paramètres.</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/b0xf7fdc1b0.png"
+        data-srcset="/fr/linux-libraries-1/datas/b0xf7fdc1b0.png, /fr/linux-libraries-1/datas/b0xf7fdc1b0.png 1.5x, /fr/linux-libraries-1/datas/b0xf7fdc1b0.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/b0xf7fdc1b0.png"
+        title="b0xf7fdc1b0" width="591" height="118" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/espb0xf7fdc1b0.png"
+        data-srcset="/fr/linux-libraries-1/datas/espb0xf7fdc1b0.png, /fr/linux-libraries-1/datas/espb0xf7fdc1b0.png 1.5x, /fr/linux-libraries-1/datas/espb0xf7fdc1b0.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/espb0xf7fdc1b0.png"
+        title="espb0xf7fdc1b0" width="1124" height="700" /></p>
+<p>Nous avons deux valeurs intéressantes, l&rsquo;adresse <strong>0xf7ffd9e0</strong> empilé à l&rsquo;entrée 0 du <strong>.plt</strong> et l&rsquo;offset <strong>0x00000008</strong> de <strong>printf</strong>.</p>
+<p>Ces deux valeurs sont passées à la véritable fonction de résolution.</p>
+<p>Nous pouvons vérifier les valeurs passées en paramètres à la véritable fonction grâce aux valeurs poussées sur la pile(esp+0x10, esp+0 xc).</p>
+<p>Mettons un breakpoint sur la véritable fonction à l&rsquo;adresse <strong>0xf7fda520</strong>, et vérifions si les valeurs sont bien passées.</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/b0xf7fda520.png"
+        data-srcset="/fr/linux-libraries-1/datas/b0xf7fda520.png, /fr/linux-libraries-1/datas/b0xf7fda520.png 1.5x, /fr/linux-libraries-1/datas/b0xf7fda520.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/b0xf7fda520.png"
+        title="b0xf7fda520" width="493" height="116" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/p0xf7fda520.png"
+        data-srcset="/fr/linux-libraries-1/datas/p0xf7fda520.png, /fr/linux-libraries-1/datas/p0xf7fda520.png 1.5x, /fr/linux-libraries-1/datas/p0xf7fda520.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/p0xf7fda520.png"
+        title="p0xf7fda520" width="995" height="696" /></p>
+<p>Nous pouvons voir sur la pile nos deux valeurs.</p>
+<p>Ainsi, grâce à l&rsquo;offset <strong>0x00000008</strong> de <strong>printf</strong>, l&rsquo;<strong>éditeur de liens(linker)</strong> saura mettre à jour le <strong>.got.plt</strong> pour le <strong>printf</strong>.</p>
+<p>Nous n&rsquo;irons pas bien loin dans cette fonction de résolution d&rsquo;<strong>éditeur de liens</strong>, dans un autre chapitre nous en parlerons en détail.</p>
+<p>Revenons dans la fonction <strong>0xf7fdc1b0</strong> et mettons un breakpoint juste après le call à l&rsquo;adresse <strong>0xf7fdc1c0</strong>.</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/0xf7fdc1c0.png"
+        data-srcset="/fr/linux-libraries-1/datas/0xf7fdc1c0.png, /fr/linux-libraries-1/datas/0xf7fdc1c0.png 1.5x, /fr/linux-libraries-1/datas/0xf7fdc1c0.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/0xf7fdc1c0.png"
+        title="0xf7fdc1c0" width="542" height="292" /></p>
+<p>Une fois le <strong>printf</strong> résolu, il faut pouvoir s&rsquo;en servir et continuer l&rsquo;exécution.</p>
+<p>c&rsquo;est à ça sert le reste du code en quelque sorte.</p>
+<p><strong>EAX</strong> contient la valeur de retour de la véritable fonction de résolution, son contenu est poussé sur la pile à l&rsquo;instruction :
+<code>0xf7fdc1c4  mov    DWORD PTR [esp], eax</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/eaxlibc.png"
+        data-srcset="/fr/linux-libraries-1/datas/eaxlibc.png, /fr/linux-libraries-1/datas/eaxlibc.png 1.5x, /fr/linux-libraries-1/datas/eaxlibc.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/eaxlibc.png"
+        title="eaxlibc" width="1182" height="728" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/textlibc.png"
+        data-srcset="/fr/linux-libraries-1/datas/textlibc.png, /fr/linux-libraries-1/datas/textlibc.png 1.5x, /fr/linux-libraries-1/datas/textlibc.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/textlibc.png"
+        title="textlibc" width="725" height="150" /></p>
+<p>Il s&rsquo;agit en fait de l&rsquo;adresse de la fonction <strong>printf</strong> dans la <strong>libc</strong> : ainsi <strong>printf</strong> est bien résolu.</p>
+<p>Puis après on change la valeur de <strong>EAX</strong> par l&rsquo;adresse de la chaine de caractère <strong>&ldquo;I&rsquo;m _R4v3n&rdquo;</strong> qui se trouve à l&rsquo;offset 0x4 sur la pile, C&rsquo;est la chaîne cible à imprimer.</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/exp&#43;0x4.png"
+        data-srcset="/fr/linux-libraries-1/datas/exp&#43;0x4.png, /fr/linux-libraries-1/datas/exp&#43;0x4.png 1.5x, /fr/linux-libraries-1/datas/exp&#43;0x4.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/exp&#43;0x4.png"
+        title="exp&#43;0x4" width="944" height="742" /></p>
+<p>Comme on a l&rsquo;adresse de <strong>printf</strong>(dans la <strong>libc</strong>) sur la pile à l&rsquo;offset <strong>0x0</strong>, si on fait un <strong>ret</strong>, cette adresse sera passée dans l&rsquo;<strong>EIP</strong> et la fonction <strong>printf</strong> sera appelée directement.</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/exp&#43;0x0.png"
+        data-srcset="/fr/linux-libraries-1/datas/exp&#43;0x0.png, /fr/linux-libraries-1/datas/exp&#43;0x0.png 1.5x, /fr/linux-libraries-1/datas/exp&#43;0x0.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/exp&#43;0x0.png"
+        title="exp&#43;0x0" width="997" height="692" /></p>
+<p>Faisons un <strong>ni</strong> (next instruction) et vérifions la valeur de l&rsquo;<strong>EIP</strong>.</p>
+<p>Nous pouvons vérifier qu&rsquo;on exécute dorénavant le <strong>printf</strong> depuis la <strong>libc</strong>.</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/printfresolv.png"
+        data-srcset="/fr/linux-libraries-1/datas/printfresolv.png, /fr/linux-libraries-1/datas/printfresolv.png 1.5x, /fr/linux-libraries-1/datas/printfresolv.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/printfresolv.png"
+        title="printfresolv" width="987" height="746" /></p>
+<div class="details admonition question open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-question-circle fa-fw" aria-hidden="true"></i>Thinking<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">Devrait-on répéter le même mécanisme de résolution avec chaque appel <strong>printf</strong>?</div>
+        </div>
+    </div>
+<p>En vrai non.</p>
+<p>Une fois qu&rsquo;un symbole est résolu, ce processus de résolution ne sera pas répété pour le même symbole.</p>
+<p>Pour cette raison le <strong>.got.plt</strong> sera mis à jour.</p>
+<p>Revenons dans le <strong>.plt</strong>.</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/fr/linux-libraries-1/datas/printfgotresolv.png"
+        data-srcset="/fr/linux-libraries-1/datas/printfgotresolv.png, /fr/linux-libraries-1/datas/printfgotresolv.png 1.5x, /fr/linux-libraries-1/datas/printfgotresolv.png 2x"
+        data-sizes="auto"
+        alt="/fr/linux-libraries-1/datas/printfgotresolv.png"
+        title="printfgotresolv" width="671" height="345" /></p>
+<p>Avant ce <strong>jump</strong> nous amenait à l&rsquo;instruction suivante car <strong>printf</strong> n&rsquo;etais pas résolu mais maintenant ça amène directement dans le <strong>.text</strong> du <strong>libc</strong>(<strong>/lib/i386-linux-gnu/libc.so.6</strong>).</p>
+<p>Si nous appelons à nouveau le <strong>printf</strong> dans le code, on ne fera plus appel au <strong>linker</strong> pour rechercher son adresse puisque son adresse est déjà disponible dans le <strong>.got.plt</strong>.</p>
+<blockquote>
+<h2 id="0x3-exploitation">0x3 Exploitation</h2>
+</blockquote>
+<ul>
+<li><a href="/fr/linux-libraries-1/datas/invisible.rar" rel=""><strong>GOT Overwrite</strong></a></li>
+<li><a href="https://github.com/w31rdr4v3n/Binary-Exploitation/blob/main/ROP/rop_ret2libc.md" target="_blank" rel="noopener noreffer "><strong>Ret2libc</strong></a></li>
+</ul>
+<h1 id="références">Références</h1>
+<p><a href="https://developer.ibm.com/tutorials/l-dynamic-libraries/" target="_blank" rel="noopener noreffer ">IBM : Anatomy of Linux dynamic libraries</a></p>
+<p><a href="https://docs.oracle.com/cd/E37838_01/html/E61063/elf-23207.html" target="_blank" rel="noopener noreffer ">Sections of an ELF File</a></p>
+<p><a href="https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter3-7.html" target="_blank" rel="noopener noreffer ">Lazy Loading of Dynamic Dependencies</a></p></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Mis à jour le 2022-09-28</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/fr/linux-libraries-1/index.md" target="_blank">Lire Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Partager sur Twitter" data-sharer="twitter" data-url="https://w31rdr4v3n.github.io/fr/linux-libraries-1/" data-title="Linux libraries part 1" data-via="w31rdr4v3n" data-hashtags="Linux,ELF,Dynamic Linker,Shared libraries,PLT,GOT,LD,Lazy binding,pwn"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Partager sur Facebook" data-sharer="facebook" data-url="https://w31rdr4v3n.github.io/fr/linux-libraries-1/" data-hashtag="Linux"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Partager sur Linkedin" data-sharer="linkedin" data-url="https://w31rdr4v3n.github.io/fr/linux-libraries-1/"><i class="fab fa-linkedin fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Partager sur WhatsApp" data-sharer="whatsapp" data-url="https://w31rdr4v3n.github.io/fr/linux-libraries-1/" data-title="Linux libraries part 1" data-web><i class="fab fa-whatsapp fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Partager sur Hacker News" data-sharer="hackernews" data-url="https://w31rdr4v3n.github.io/fr/linux-libraries-1/" data-title="Linux libraries part 1"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/fr/tags/linux/">Linux</a>,&nbsp;<a href="/fr/tags/elf/">ELF</a>,&nbsp;<a href="/fr/tags/dynamic-linker/">Dynamic Linker</a>,&nbsp;<a href="/fr/tags/shared-libraries/">Shared libraries</a>,&nbsp;<a href="/fr/tags/plt/">PLT</a>,&nbsp;<a href="/fr/tags/got/">GOT</a>,&nbsp;<a href="/fr/tags/ld/">LD</a>,&nbsp;<a href="/fr/tags/lazy-binding/">Lazy binding</a>,&nbsp;<a href="/fr/tags/pwn/">pwn</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Retour</a></span>&nbsp;|&nbsp;<span><a href="/fr/">Accueil</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/fr/linux-libraries/" class="prev" rel="prev" title="Linux libraries part 0"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Linux libraries part 0</a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2020 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://mobile.twitter.com/w31rdr4v3n" target="_blank">R4v3N</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Retour en Haut">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="Afficher les Commentaires">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.37.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.8/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.fr.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/twemoji@13.0.0/dist/twemoji.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/js/lightgallery.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lg-thumbnail.js@1.2.0/dist/lg-thumbnail.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lg-zoom.js@1.2.0/dist/lg-zoom.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.4.0/sharer.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/copy-tex.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/mhchem.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copier dans le presse-papiers","maxShownLines":50},"comment":{"valine":{"appId":"dau7YgRPdSUurYQ8F5vJY1NH-MdYXbMMI","appKey":"h5m3dql66xHK3mf0WAGVJLgR","avatar":"robohash","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@14.0.0/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":true,"highlight":true,"lang":"en","pageSize":10,"placeholder":"Put your comment","recordIP":true,"serverURLs":"https://dau7ygrp.api.lncldglobal.com","visitor":true}},"cookieconsent":{"content":{"dismiss":"Se mettre d'accord","link":"Apprendre encore plus","message":"Ce site Web utilise des Cookies pour améliorer votre expérience."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/fr/index.json","lunrLanguageCode":"fr","maxResultLength":10,"noResultsFound":"Aucun résultat trouvé","snippetLength":30,"type":"lunr"},"twemoji":true};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

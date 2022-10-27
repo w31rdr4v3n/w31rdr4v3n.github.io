@@ -1,16 +1,18 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
-        <title>misc - Tag - R4v3N Blog</title>
+        <title>misc - Tag - Official R4v3N Blog</title>
         <link>https://w31rdr4v3n.github.io/tags/misc/</link>
-        <description>misc - Tag - R4v3N Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Thu, 23 Dec 2021 21:22:57 &#43;0100</lastBuildDate><atom:link href="https://w31rdr4v3n.github.io/tags/misc/" rel="self" type="application/rss+xml" /><item>
+        <description>misc - Tag - Official R4v3N Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Thu, 23 Dec 2021 21:22:57 &#43;0100</lastBuildDate><atom:link href="https://w31rdr4v3n.github.io/tags/misc/" rel="self" type="application/rss+xml" /><item>
     <title>TFC CTF 2021 Writeup</title>
     <link>https://w31rdr4v3n.github.io/tfcctf2021-writeup/</link>
     <pubDate>Thu, 23 Dec 2021 21:22:57 &#43;0100</pubDate>
-    <author>Author</author>
+    <author>_R4v3N</author>
     <guid>https://w31rdr4v3n.github.io/tfcctf2021-writeup/</guid>
     <description><![CDATA[<div class="featured-image">
                 <img src="/tfc.png" referrerpolicy="no-referrer">
-            </div><p>This article provides answer keys to the TFC CTF 2021 challenges.</p>]]></description>
-</item></channel>
+            </div><h1 id="tfc-ctf-2021">TFC CTF 2021</h1>
+<p>This article provides answer keys to the TFC CTF 2021 challenges.</p>]]></description>
+</item>
+</channel>
 </rss>

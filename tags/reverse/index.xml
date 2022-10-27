@@ -1,16 +1,18 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
-        <title>reverse - Tag - R4v3N Blog</title>
+        <title>reverse - Tag - Official R4v3N Blog</title>
         <link>https://w31rdr4v3n.github.io/tags/reverse/</link>
-        <description>reverse - Tag - R4v3N Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 30 Mar 2022 21:53:15 &#43;0100</lastBuildDate><atom:link href="https://w31rdr4v3n.github.io/tags/reverse/" rel="self" type="application/rss+xml" /><item>
+        <description>reverse - Tag - Official R4v3N Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Wed, 30 Mar 2022 21:53:15 &#43;0100</lastBuildDate><atom:link href="https://w31rdr4v3n.github.io/tags/reverse/" rel="self" type="application/rss+xml" /><item>
     <title>picoCTF2022 Writeup</title>
     <link>https://w31rdr4v3n.github.io/picoctf2022-writeup/</link>
     <pubDate>Wed, 30 Mar 2022 21:53:15 &#43;0100</pubDate>
-    <author>Author</author>
+    <author>R4v3N</author>
     <guid>https://w31rdr4v3n.github.io/picoctf2022-writeup/</guid>
     <description><![CDATA[<div class="featured-image">
                 <img src="/picoctf-logo-social.png" referrerpolicy="no-referrer">
-            </div><p>This article presents answers to the picoCTF 2022 challenges.</p>]]></description>
-</item></channel>
+            </div><h1 id="picoctf-2022">picoCTF 2022</h1>
+<p>This article presents answers to the picoCTF 2022 challenges.</p>]]></description>
+</item>
+</channel>
 </rss>
