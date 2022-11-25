@@ -8,7 +8,7 @@ Dans cette partie 1 sur les librairies Linux, nous parlerons des binaires liés 
 
 Le binaire statiquement lié intègre toutes les bibliothèques dont il a besoin pour fonctionner au moment de la compilation, en revanche ce n'est pas le cas pour le binaire dynamiquement lié.
 
-Reprenons l'image du part0.
+Reprenons l'image du [part0](https://w31rdr4v3n.github.io/fr/linux-libraries/).
 
 ![resolv](datas/resolv.png)
 
@@ -68,7 +68,7 @@ Au chargement, une section .interp est détectée par le noyau.
 
 Cette section contient le nom du chemin (path) d'un interpréteur de programme.
 
-Il s'agit de l'éditeur de liens dynamiques, **/lib64/ld-linux-x86-64.so.2** dans mon cas sur l'image ci-dessus.
+Il s'agit de l'éditeur de liens dynamiques, **/lib/ld-linux.so.2** dans mon cas sur l'image ci-dessus.
 
 Affichons le contenu de la section .interp et voyons concrètement ce qu'elle contient.
 

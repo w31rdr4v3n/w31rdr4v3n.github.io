@@ -8,7 +8,7 @@ In this part 1 about Linux libraries, we will talk about dynamically linked bina
 
 The statically linked binary includes all the libraries it needs to work at compile time, but this is not the case for the dynamically linked binary.
 
-Let's take the image of the part0 again.
+Let's take the image of the [part0](https://w31rdr4v3n.github.io/linux-libraries/) again.
 
 ![resolv](datas/resolv.png)
 
@@ -68,7 +68,7 @@ On loading, an .interp section is detected by the kernel.
 
 This section contains the path of a program interpreter.
 
-This is the dynamic linker, **/lib64/ld-linux-x86-64.so.2** in my case on the picture above.
+This is the dynamic linker, **/lib/ld-linux.so.2** in my case on the picture above.
 
 Let's display the content of the .interp section and see what it contains.
 
@@ -244,7 +244,7 @@ Let's have a look at this **.text** section of the link from the obtained addres
 This is not really the address resolution function but simply calls the real resolution function.
 
 {{< admonition type=question title="Thinking" >}}
-How does she know that this is the resolution of **printf** but not **scanf**?
+How does it know that this is the resolution of **printf** but not **scanf**?
 {{< /admonition >}}
 
 To find out, let's put a breakpoint at address **0xf7fdc1b0** in the **.text** of the linker and check the values passed in parameters.

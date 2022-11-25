@@ -145,7 +145,7 @@ In this part 1 about Linux libraries, we will talk about dynamically linked bina
 <h2 id="0x0-intro">0x0 Intro</h2>
 </blockquote>
 <p>The statically linked binary includes all the libraries it needs to work at compile time, but this is not the case for the dynamically linked binary.</p>
-<p>Let&rsquo;s take the image of the part0 again.</p>
+<p>Let&rsquo;s take the image of the <a href="https://w31rdr4v3n.github.io/linux-libraries/" target="_blank" rel="noopener noreffer ">part0</a> again.</p>
 <p><img
         class="lazyload"
         src="/svg/loading.min.svg"
@@ -256,7 +256,7 @@ In this part 1 about Linux libraries, we will talk about dynamically linked bina
 <p>When starting a dynamically linked ELF binary, the kernel loads the ELF image of the binary into the virtual memory of the user space.</p>
 <p>On loading, an .interp section is detected by the kernel.</p>
 <p>This section contains the path of a program interpreter.</p>
-<p>This is the dynamic linker, <strong>/lib64/ld-linux-x86-64.so.2</strong> in my case on the picture above.</p>
+<p>This is the dynamic linker, <strong>/lib/ld-linux.so.2</strong> in my case on the picture above.</p>
 <p>Let&rsquo;s display the content of the .interp section and see what it contains.</p>
 <p><img
         class="lazyload"
@@ -531,7 +531,7 @@ It contains the target addresses (after they have been searched) or a return add
             <i class="icon fas fa-question-circle fa-fw" aria-hidden="true"></i>Thinking<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
-            <div class="admonition-content">How does she know that this is the resolution of <strong>printf</strong> but not <strong>scanf</strong>?</div>
+            <div class="admonition-content">How does it know that this is the resolution of <strong>printf</strong> but not <strong>scanf</strong>?</div>
         </div>
     </div>
 <p>To find out, let&rsquo;s put a breakpoint at address <strong>0xf7fdc1b0</strong> in the <strong>.text</strong> of the linker and check the values passed in parameters.</p>

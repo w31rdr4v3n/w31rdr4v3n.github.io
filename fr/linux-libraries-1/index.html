@@ -145,7 +145,7 @@ Dans cette partie 1 sur les librairies Linux, nous parlerons des binaires liés 
 <h2 id="0x0-intro">0x0 Intro</h2>
 </blockquote>
 <p>Le binaire statiquement lié intègre toutes les bibliothèques dont il a besoin pour fonctionner au moment de la compilation, en revanche ce n&rsquo;est pas le cas pour le binaire dynamiquement lié.</p>
-<p>Reprenons l&rsquo;image du part0.</p>
+<p>Reprenons l&rsquo;image du <a href="https://w31rdr4v3n.github.io/fr/linux-libraries/" target="_blank" rel="noopener noreffer ">part0</a>.</p>
 <p><img
         class="lazyload"
         src="/svg/loading.min.svg"
@@ -256,7 +256,7 @@ Dans cette partie 1 sur les librairies Linux, nous parlerons des binaires liés 
 <p>Au démarrage d&rsquo;un binaire ELF lié dynamiquement, le noyau charge l&rsquo;image ELF du binaire dans la mémoire virtuelle de l&rsquo;espace utilisateur.</p>
 <p>Au chargement, une section .interp est détectée par le noyau.</p>
 <p>Cette section contient le nom du chemin (path) d&rsquo;un interpréteur de programme.</p>
-<p>Il s&rsquo;agit de l&rsquo;éditeur de liens dynamiques, <strong>/lib64/ld-linux-x86-64.so.2</strong> dans mon cas sur l&rsquo;image ci-dessus.</p>
+<p>Il s&rsquo;agit de l&rsquo;éditeur de liens dynamiques, <strong>/lib/ld-linux.so.2</strong> dans mon cas sur l&rsquo;image ci-dessus.</p>
 <p>Affichons le contenu de la section .interp et voyons concrètement ce qu&rsquo;elle contient.</p>
 <p><img
         class="lazyload"
